@@ -2,7 +2,7 @@
 // CPSC 331 -Spring 2024- Assignment 1 | Complexity of Algorithms
 // Name: Benny Liang | UCID: 30192142
 
-public class ShellSort 
+public class ShellSortWithTime 
 {
     // Iterative Shell sort using novel gap sequence
     public static void shellSortIterative(int[] array)

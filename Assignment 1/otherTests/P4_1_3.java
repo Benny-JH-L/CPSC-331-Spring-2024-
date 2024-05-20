@@ -6,7 +6,7 @@ public class P4_1_3
 
     public static void main(String[] args) 
     {
-        int n = 15, m = 0, o = 0;
+        int n = 1000, m = 0, o = 0;
         func(n, m, o);    
         System.out.printf("\nn = %s\nLoop Body Exeuctions = %s", n, loopBodyEx);
         System.out.printf("\nFunc calls = %s", funcCalls);

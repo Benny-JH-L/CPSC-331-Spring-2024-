@@ -26,6 +26,10 @@ public class QueueTwoStacks<T extends Comparable>
         q1.print();
         int num2 = q1.peek();
         System.out.printf("\nPeek: %s", num2);
+        int num3 = rand.nextInt(100);
+        q1.enqueue(num3);
+        System.out.printf("\nEnqueued: %s", num3);
+        q1.print();
     }
 
     public QueueTwoStacks()

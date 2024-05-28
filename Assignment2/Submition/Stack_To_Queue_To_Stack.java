@@ -79,31 +79,31 @@ public class Stack_To_Queue_To_Stack
         
         // Print the generated random numbers
         System.out.println("Unsorted Numbers numbers:");
-        // TA's version
-        // for (int number : randomNumbers)
-        //     System.out.println(number);
-
-        // My version
+        // Assignment version
         for (int number : randomNumbers)
-            System.out.print(number + " ");
-        System.out.println();
+            System.out.println(number);
+
+        // My version (To see numbers easier)
+        // for (int number : randomNumbers)
+        //     System.out.print(number + " ");
+        // System.out.println();
         
         // Call the functions to execute the steps
         Unsorted_Stack(randomNumbers);
         System.out.println("Unsorted numbers in Stack:");
-        printArrayMyVer(randomNumbers);
+        printArray(randomNumbers);
 
         Stack_To_Queue(randomNumbers);
         System.out.println("Unsorted numbers in Queue:");
-        printArrayMyVer(randomNumbers);
+        printArray(randomNumbers);
 
         Sorting_Queue(randomNumbers);
         System.out.println("Sorted numbers in Queue:");
-        printArrayMyVer(randomNumbers);
+        printArray(randomNumbers);
 
         Sorted_Stack(randomNumbers);
         System.out.println("Sorted numbers in Stack:");
-        printArrayMyVer(randomNumbers);
+        printArray(randomNumbers);
     }
 
     private static void printArray(int[] array)
@@ -113,10 +113,11 @@ public class Stack_To_Queue_To_Stack
         System.out.println();
     }
 
-    private static void printArrayMyVer(int[] array)
-    {
-        for (int num : array)
-            System.out.print(num + " ");
-        System.out.println();
-    }
+    // (To see numbers easier between method calls)
+    // private static void printArrayMyVer(int[] array)
+    // {
+    //     for (int num : array)
+    //         System.out.print(num + " ");
+    //     System.out.println();
+    // }
 }

@@ -42,7 +42,7 @@ public class Stack_To_Queue_To_Stack
         for (int i = 1; i <= array.length - 1; i++)
         {
             int j = i;
-            while (j > 0 && array[j] > array[j-1])
+            while (j > 0 && array[j] > array[j-1])      // used '>' instead of '<' to get array sorted in the order: largest -> smallest
             {
                 // Swap elements
                 int tmp = array[j];

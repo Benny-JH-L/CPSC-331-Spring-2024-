@@ -1,4 +1,4 @@
-package Tutorial;
+package Tutorial.May24;
 
 import java.util.Random;
 

@@ -1,5 +1,11 @@
 package Assignment2.Submition;
 
+// CPSC 331 -Spring 2024- Assignment 2 | Application of List, Stack and Queue
+// Name: Benny Liang | UCID: 30192142
+
+/**
+ * 3.3 Exercise 3 - Working with Modified Shunting Yard Algorithm
+ */
 public class Modified_ShuntingYard_Evaluation 
 {
     // Implement the steps of Modified Shunting Yard Algorithm here 

@@ -16,11 +16,11 @@ public class Stack_To_Queue_To_Stack
         // Create a 'stack' that is reversed of array
         int[] stack = new int[array.length];
         for (int i = 0, j = array.length - 1; i < array.length; i++, j--)
-            stack[i] = array[j];
+            stack[i] = array[j];                        // pushing onto stack with array element
         
-        // Set the input array as 'stack'
+        // Set the input array as the 'stack'
         for (int i = 0; i < stack.length; i++)
-            array[i] = stack[i];
+            array[i] = stack[i];                        
     }
 
     // Step 2: Pop the numbers and enqueue in the queue.
@@ -29,9 +29,9 @@ public class Stack_To_Queue_To_Stack
         // Create a 'queue' from input array/stack
         int[] queue = new int[array.length];
         for (int i = 0, j = array.length - 1; i < queue.length; i++, j--)
-            queue[i] = array[j];
+            queue[i] = array[j];                        // poping from the array (Stack) and enqueuing to the queue
         
-        // Set the input array/stack as 'queue'
+        // Set the input array/stack as the 'queue'
         for (int i = 0; i < queue.length; i++)
             array[i] = queue[i];
     }
@@ -59,7 +59,7 @@ public class Stack_To_Queue_To_Stack
         // Create a 'stack' with the input array
         int[] stack = new int[array.length];
         for (int i = 0, j = array.length - 1; i < stack.length; i++, j--)
-            stack[i] = array[j];
+            stack[i] = array[j];                        // pushing elements from the array onto the 'stack'
         
         // Set the input array as the 'stack'
         for (int i = 0; i < stack.length; i++)

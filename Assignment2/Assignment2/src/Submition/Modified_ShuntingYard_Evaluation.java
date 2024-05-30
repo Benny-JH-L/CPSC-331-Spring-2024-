@@ -15,14 +15,14 @@ public class Modified_ShuntingYard_Evaluation
     public static String convertToPostfix(String expression)
     {
         Stack<String> operatorStack = new Stack<String>();
-        Queue<String> list = new Queue<String>();
+        Queue<String> queue = new Queue<String>();
 
         for (int i = 0; i < expression.length(); i++)
         {
             String str = String.valueOf(expression.charAt(i));    // Converting the character at index 'i' of the expression to a string.
             
             if (isOperand(str))         // Checking if the converted character is an operand.
-                list.enqueue(str);      // if it is an operand, add it to the list/output.
+                queue.enqueue(str);     // if it is an operand, add it to the output queue.
             else if (!operatorStack.isEmpty())              // otherwise, it is an operator.
             {
                 String topOperator = operatorStack.peek();
@@ -30,20 +30,20 @@ public class Modified_ShuntingYard_Evaluation
                     operatorStack.push(str);                // push 'str' onto the stack.
                 else                                        // otherwise, 'str' has less precedence than the top operator.
                 {
-                    topOperator = operatorStack.pop();      // pop the top operator that has less precedence and,
-                    list.enqueue(topOperator);              // add it to the output list.
+                    topOperator = operatorStack.pop();      // pop the top operator that has more precedence and,
+                    queue.enqueue(topOperator);             // enqueue it to the output queue.
 
-                    for (int k = 0; k < operatorStack.size(); k++)  
+                    for (int k = 0; k < operatorStack.size(); k++)  // go through the stack and pop operators that have more precedence than 'str'
                     {
                         topOperator = operatorStack.peek();
                         if (!hasHigherPrecedence(topOperator, str)) // topOperator has more precedence than 'str'
                         {
                             String poppedOperator = operatorStack.pop();    // pop the stack and,
-                            list.enqueue(poppedOperator);                   // add it to the output list.
+                            queue.enqueue(poppedOperator);                  // enqueue it to the output queue.
                         }
                         else                                        // otherwise, topOperator has less precedence than 'str'
                         {
-                            operatorStack.add(str);                 // add 'str' to the operator stack.
+                            operatorStack.add(str);                 // push 'str' to the operator stack.
                             break;                                  // exit the loop.
                         }
                     }
@@ -53,15 +53,17 @@ public class Modified_ShuntingYard_Evaluation
             else    // add the operator if the stack is empty
                 operatorStack.add(str);
         }
-        String postFix = "";
-        String character;
-        int size = list.size();
+
+        // Converting the queue elements into a string
+        String postFix = "", character;
+        int size = queue.size();
         for (int i = 0; i < size; i++)
         {
-            character = list.dequeue();
+            character = queue.dequeue();
             postFix = postFix + character;
         }
 
+        // Adding the rest of the operators in the stack into the string.
         size = operatorStack.size();
         for (int i = 0; i < size; i++)
         {
@@ -161,11 +163,14 @@ public class Modified_ShuntingYard_Evaluation
 
         String expression1 = "2+3*1";
         String expression2 = "3*2^4-7";     // side note: numbers larger than 9, or less than 0, or are doubles can't be converted/calculated properly.
+        String expression3 = "3*2^4-71";    // my test
 
         String postfix1 = convertToPostfix(expression1);
         String postfix2 = convertToPostfix(expression2);
+        String postfix3 = convertToPostfix(expression3);    // my test
 
         System.out.println(expression1 + " -> Postfix: " + postfix1 + " , Evaluation: " + evaluatePostfix(postfix1));
         System.out.println(expression2 + " -> Postfix: " + postfix2 + " , Evaluation: " + evaluatePostfix(postfix2));
+        System.out.println(expression3 + " -> Postfix: " + postfix3 + " , Evaluation: " + evaluatePostfix(postfix3));   // my test
     }
 }

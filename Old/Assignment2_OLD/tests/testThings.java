@@ -1,4 +1,4 @@
-package Assignment2_OLD.tests;
+package Old.Assignment2_OLD.tests;
 
 public class testThings
 {

@@ -1,8 +1,8 @@
-package Assignment2_OLD.Submition;
+package Old.Assignment2_OLD.Submition;
 
 import java.util.Stack;
 
-import Assignment2_OLD.Submition.ADT.Queue;
+import Old.Assignment2_OLD.Submition.ADT.Queue;
 
 // CPSC 331 -Spring 2024- Assignment 2 | Application of List, Stack and Queue
 // Name: Benny Liang | UCID: 30192142

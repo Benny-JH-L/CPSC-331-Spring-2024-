@@ -1,4 +1,4 @@
-package Assignment2_OLD.Submition;
+package Old.Assignment2_OLD.Submition;
 
 import java.util.Random;
 

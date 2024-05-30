@@ -103,7 +103,7 @@ public class Queue<T extends Comparable>
     }
 
     /**
-     * Not needed for Assignment 2, so I'm not going to implement it.
+     * Not needed for Assignment 2, so I'm not going to implement it,
      * Returns false!
      * @return a boolean.
      */
@@ -114,12 +114,16 @@ public class Queue<T extends Comparable>
     }
 
     /**
-     * Not needed for Assignment 2, so I'm not going to implement it.
+    /**
+     * Not needed for Assignment 2, so I'm not going to implement it,
+     * Returns false!
      * @param item a generic type.
+     * @return a boolean. True if item exists and was removed, false otherwise.
      */
-    public void remove(T item)
+    public boolean remove(T item)
     {
         // code
+        return false;
     }
 
     /**

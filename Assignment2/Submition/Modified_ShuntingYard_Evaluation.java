@@ -1,5 +1,8 @@
 package Assignment2.Submition;
 
+import java.util.Stack;
+import Assignment2.Submition.ADT.Queue;
+
 // CPSC 331 -Spring 2024- Assignment 2 | Application of List, Stack and Queue
 // Name: Benny Liang | UCID: 30192142
 
@@ -11,29 +14,103 @@ public class Modified_ShuntingYard_Evaluation
     // Implement the steps of Modified Shunting Yard Algorithm here 
     public static String convertToPostfix(String expression)
     {
+        Stack<String> operatorStack = new Stack<String>();
+        Queue<String> list = new Queue<String>();
+
+        for (int i = 0; i < expression.length(); i++)
+        {
+            String str = String.valueOf(expression.charAt(i));    // Converting the character at index 'i' of the expression to a string.
+            
+            if (isOperand(str))     // Checking if the converted character is an operand.
+                list.enqueue(str);      // if it is an operand, add it to the list/output.
+            else if (!operatorStack.isEmpty())              // otherwise, it is an operator.
+            {
+                String topOperator = operatorStack.peek();
+                if (hasHigherPrecedence(topOperator, str))  // if 'str' has higher precedence than the top operator in the stack,
+                    operatorStack.push(str);                // push 'str' onto the stack.
+                else                                        // otherwise, 'str' has less precedence than the top operator.
+                {
+                    topOperator = operatorStack.pop();      // pop the top operator that has less precedence and,
+                    list.enqueue(topOperator);              // add it to the output list.
+
+                    for (int k = 0; k < operatorStack.size(); k++)  
+                    {
+                        topOperator = operatorStack.peek();
+                        if (!hasHigherPrecedence(topOperator, str)) // topOperator has more precedence than 'str'
+                        {
+                            String poppedOperator = operatorStack.pop();    // pop the stack and,
+                            list.enqueue(poppedOperator);                   // add it to the output list.
+                        }
+                        else                                        // otherwise, topOperator has less precedence than 'str'
+                        {
+                            operatorStack.add(str);                 // add 'str' to the operator stack.
+                            break;                                  // exit the loop.
+                        }
+                    }
+                    operatorStack.add(str);                 // push the lowest precedence operator onto the stack.
+                }
+            }
+            else    // add the operator if the stack is empty
+                operatorStack.add(str);
+        }
         String postFix = "";
-        // code
+        String character;
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            character = list.dequeue();
+            postFix = postFix + character;
+        }
+
+        size = operatorStack.size();
+        for (int i = 0; i < size; i++)
+        {
+            character = operatorStack.pop();
+            postFix = postFix + character;
+        }
         return postFix;
     }
 
     // isOperand checks if the string passed is an operand
     private static boolean isOperand(String token)
     {
-        boolean isOperand = false;
-        // code
-        return isOperand;
+        String[] operators = {"^", "/", "*", "+", "-"};
+
+        // Checking if the token is an operator
+        for (int i = 0; i < operators.length; i++)
+        {
+            if (token.equals(operators[i])) // if the token is an operator,
+                return false;               // return false.
+        }
+        return true;                        // otherwise, return true.
     }
 
     // hasHigherPrecedence checks which operator has higher precedence
     private static boolean hasHigherPrecedence(String op1, String op2)
     {
-        // code
+        // If op1/op2 are multiplication/division, op1 will have higher precendence. (Assuming op1 is 'first', more left, operator)
+        // Will return false if op2 has less precendence than op1, and return true if op2 has higher (or equal) precedence than op1.
+        int precedenceOp1 = getPrecedence(op1);
+        int precedenceOp2 = getPrecedence(op2);
+        if (precedenceOp1 > precedenceOp2)
+            return false;
+        else 
+            return true;
     }
 
     // getPrecedence is used to set up a precedence score to the operator passed
     private static int getPrecedence(String operator)
     {
-        // code
+        // BEDMAS
+        String[] operators = {"^", "/", "*", "+", "-"};
+        int precedence = operators.length;
+        // the precedence for: "^" is 5, "/" is 4, ... , "-" is 1.
+        for (int i = 0; i < operators.length; i++)
+        {
+            if (operator.equals(operators[i]))
+                return precedence - i;
+        }
+        return -1;   // if operator is not in the operators array, return -1.
     }
 
     // evaluatePostfix takes the postfix expression to evaluate the result
@@ -52,6 +129,9 @@ public class Modified_ShuntingYard_Evaluation
 
     public static void main(String[] args)
     {
+        System.out.printf("\n5/2 = %s", (5/2));
+        System.out.println("\n5%2 = " + (5 % 2) + "\n");
+
         String expression1 = "2+3*1";
         String expression2 = "3*2^4-7";
 

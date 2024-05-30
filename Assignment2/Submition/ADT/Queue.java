@@ -16,6 +16,9 @@ public class Queue<T extends Comparable>
     private Node head, tail;
     private int size;
 
+    /**
+     * Constructor for Queue.
+     */
     public Queue()
     {
         head = null;
@@ -97,5 +100,33 @@ public class Queue<T extends Comparable>
         head = null;
         tail = null;
         size = 0;
+    }
+
+    /**
+     * Not needed for Assignment 2, so I'm not going to implement it.
+     * Returns false!
+     * @return a boolean.
+     */
+    public boolean contains()
+    {
+        // code.
+        return false;
+    }
+
+    /**
+     * Not needed for Assignment 2, so I'm not going to implement it.
+     * @param item a generic type.
+     */
+    public void remove(T item)
+    {
+        // code
+    }
+
+    /**
+     * Not needed for Assignment 2, so I'm not going to implement it.
+     */
+    public void sort()
+    {
+        // code
     }
 }

@@ -21,7 +21,7 @@ public class Modified_ShuntingYard_Evaluation
         {
             String str = String.valueOf(expression.charAt(i));    // Converting the character at index 'i' of the expression to a string.
             
-            if (isOperand(str))     // Checking if the converted character is an operand.
+            if (isOperand(str))         // Checking if the converted character is an operand.
                 list.enqueue(str);      // if it is an operand, add it to the list/output.
             else if (!operatorStack.isEmpty())              // otherwise, it is an operator.
             {
@@ -88,7 +88,6 @@ public class Modified_ShuntingYard_Evaluation
     // hasHigherPrecedence checks which operator has higher precedence
     private static boolean hasHigherPrecedence(String op1, String op2)
     {
-        // If op1/op2 are multiplication/division, op1 will have higher precendence. (Assuming op1 is 'first', more left, operator)
         // Will return false if op2 has less precendence than op1, and return true if op2 has higher (or equal) precedence than op1.
         int precedenceOp1 = getPrecedence(op1);
         int precedenceOp2 = getPrecedence(op2);
@@ -116,7 +115,23 @@ public class Modified_ShuntingYard_Evaluation
     // evaluatePostfix takes the postfix expression to evaluate the result
     public static double evaluatePostfix(String expression)
     {
-        // code
+        Stack<String> evalStack = new Stack<>();
+
+        for (int i = 0; i < expression.length(); i++)
+        {
+            String str = String.valueOf(expression.charAt(i));
+
+            if (isOperand(str))
+                evalStack.push(str);
+            else
+            {
+                double operand2 = Double.parseDouble(evalStack.pop());
+                double operand1 = Double.parseDouble(evalStack.pop());
+                double calculatedVal =  performOperation(operand1, operand2, str);  // calculate the operation
+                evalStack.push(String.valueOf(calculatedVal));      // push the calculated value onto the stack
+            }
+        }
+        return Double.parseDouble(evalStack.pop());                 // convert the calculated value from string to double.
     }
 
     // performOperation is used for actual operation to perform, 
@@ -124,7 +139,19 @@ public class Modified_ShuntingYard_Evaluation
     // based on the operator.
     private static double performOperation(double operand1, double operand2, String operator)
     {
-
+        // String[] operators = {"^", "/", "*", "+", "-"};  
+        double calculatedVal = Double.POSITIVE_INFINITY;
+        if (operator.equals("^"))
+            calculatedVal = Math.pow(operand1, operand2);
+        else if (operator.equals("/"))
+            calculatedVal = operand1 / operand2;
+        else if (operator.equals("*"))
+            calculatedVal = operand1 * operand2;            // note: order doesn't matter
+        else if (operator.equals("+"))
+            calculatedVal = operand1 + operand2;            // note: order doesn't matter
+        else if (operator.equals("-"))
+            calculatedVal = operand1 - operand2;
+        return calculatedVal;
     }
 
     public static void main(String[] args)
@@ -133,12 +160,12 @@ public class Modified_ShuntingYard_Evaluation
         System.out.println("\n5%2 = " + (5 % 2) + "\n");
 
         String expression1 = "2+3*1";
-        String expression2 = "3*2^4-7";
+        String expression2 = "3*2^4-7";     // side note: numbers larger than 9, or less than 0, or are doubles can't be converted/calculated properly.
 
         String postfix1 = convertToPostfix(expression1);
         String postfix2 = convertToPostfix(expression2);
 
-        System.out.println(expression1 + "->Postfix: " + postfix1 + " , Evaluation: " + evaluatePostfix(postfix1));
-        System.out.println(expression2 + "->Postfix: " + postfix2 + " , Evaluation: " + evaluatePostfix(postfix2));
+        System.out.println(expression1 + " -> Postfix: " + postfix1 + " , Evaluation: " + evaluatePostfix(postfix1));
+        System.out.println(expression2 + " -> Postfix: " + postfix2 + " , Evaluation: " + evaluatePostfix(postfix2));
     }
 }

@@ -33,7 +33,7 @@ public class Modified_ShuntingYard_Evaluation
                     topOperator = operatorStack.pop();      // pop the top operator that has more precedence and,
                     queue.enqueue(topOperator);             // enqueue it to the output queue.
 
-                    for (int k = 0; k < operatorStack.size(); k++)  // go through the stack and pop operators that have more precedence than 'str'
+                    while(!operatorStack.isEmpty())         // go through the stack and pop operators that have more precedence than 'str'
                     {
                         topOperator = operatorStack.peek();
                         if (!hasHigherPrecedence(topOperator, str)) // topOperator has more precedence than 'str'

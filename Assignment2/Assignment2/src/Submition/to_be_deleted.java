@@ -28,9 +28,9 @@ public class to_be_deleted
                 else                                        
                 {
                     topOperator = operatorStack.pop();      
-                    queue.enqueue(topOperator);             
+                    queue.enqueue(topOperator);      
 
-                    for (int k = 0; k < operatorStack.size(); k++) 
+                    while (!operatorStack.isEmpty()) 
                     {
                         topOperator = operatorStack.peek();
                         if (!hasHigherPrecedence(topOperator, str)) 
@@ -40,7 +40,7 @@ public class to_be_deleted
                         }
                         else                                     
                             break;                                  
-                        
+
                     }
                     operatorStack.push(str);                 
                 }
@@ -155,14 +155,15 @@ public class to_be_deleted
 
    public static void main(String[] args)
    {
-       String expression1 = "2+3*1";
-       String expression2 = "3*2^4-7+1-4+1*5";
+       String expression1 = "2+3*1^1+1";
+    //    String expression2 = "3*2^4-7+1-4+1*5";
     //    String expression2 = "3*2^4-7";
+    String expression2 = "0-3*2^4-7";
 
-       String postfix1 = convertToPostfix(expression1);
+    //    String postfix1 = convertToPostfix(expression1);
        String postfix2 = convertToPostfix(expression2);
 
-       System.out.println(expression1 + " -> Postfix: " + postfix1 + " , Evaluation: " + evaluatePostfix(postfix1));
+    //    System.out.println(expression1 + " -> Postfix: " + postfix1 + " , Evaluation: " + evaluatePostfix(postfix1));
        System.out.println(expression2 + " -> Postfix: " + postfix2 + " , Evaluation: " + evaluatePostfix(postfix2));
    }
 }

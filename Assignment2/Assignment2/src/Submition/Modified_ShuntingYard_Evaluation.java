@@ -42,15 +42,12 @@ public class Modified_ShuntingYard_Evaluation
                             queue.enqueue(poppedOperator);                  // enqueue it to the output queue.
                         }
                         else                                        // otherwise, topOperator has less precedence than 'str'
-                        {
-                            operatorStack.add(str);                 // push 'str' to the operator stack.
                             break;                                  // exit the loop.
-                        }
                     }
                     operatorStack.add(str);                 // push the lowest precedence operator onto the stack.
                 }
             }
-            else    // add the operator if the stack is empty
+            else    // push the operator to the stack if stack is empty
                 operatorStack.add(str);
         }
 
@@ -90,13 +87,14 @@ public class Modified_ShuntingYard_Evaluation
     // hasHigherPrecedence checks which operator has higher precedence
     private static boolean hasHigherPrecedence(String op1, String op2)
     {
-        // Will return false if op2 has less precendence than op1, and return true if op2 has higher (or equal) precedence than op1.
+        // Return true if op2 has HIGHER precedance than op1, return false otherwise.
         int precedenceOp1 = getPrecedence(op1);
         int precedenceOp2 = getPrecedence(op2);
-        if (precedenceOp1 > precedenceOp2)
-            return false;
-        else 
+
+        if (precedenceOp2 > precedenceOp1)
             return true;
+        else 
+            return false;
     }
 
     // getPrecedence is used to set up a precedence score to the operator passed
@@ -104,13 +102,14 @@ public class Modified_ShuntingYard_Evaluation
     {
         // BEDMAS
         String[] operators = {"^", "/", "*", "+", "-"};
-        int precedence = operators.length;
-        // the precedence for: "^" is 5, "/" is 4, ... , "-" is 1.
-        for (int i = 0; i < operators.length; i++)
-        {
-            if (operator.equals(operators[i]))
-                return precedence - i;
-        }
+
+        if (operator.equals(operators[0]))
+            return 5;
+        else if (operator.equals(operators[1]) || operator.equals(operators[2]))    // multiplication and division has the same precedence, execute whoever is left/appears first
+            return 4;
+        else if (operator.equals(operators[3]) || operator.equals(operators[4]))    // addition and subtraction have the same precedeence, execute whoever is left/appears first
+            return 3;
+
         return -1;   // if operator is not in the operators array, return -1.
     }
 

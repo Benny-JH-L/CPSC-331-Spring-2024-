@@ -14,9 +14,10 @@ public class to_be_deleted
     {
         Stack<String> operatorStack = new Stack<String>();
         Queue<String> queue = new Queue<String>();
-
-        for (int i = 0; i < expression.length(); i++)
+        int i = 0;
+        for (; i < expression.length(); i++)
         {
+            // System.out.printf("Executed #%s\n", i);
             String str = String.valueOf(expression.charAt(i));
             
             if (isOperand(str))         
@@ -41,7 +42,7 @@ public class to_be_deleted
                         }
                         else                                     
                         {
-                            operatorStack.add(str);                 
+                            // operatorStack.add(str);      // will cause errors      
                             break;                                  
                         }
                     }
@@ -52,10 +53,12 @@ public class to_be_deleted
                 operatorStack.add(str);
         }
 
+        // System.out.printf("\nn = %s, expression size = %s\n", i, expression.length());
+
         // Converting the queue elements into a string
         String postFix = "", character;
         int size = queue.size();
-        for (int i = 0; i < size; i++)
+        for (i = 0; i < size; i++)
         {
             character = queue.dequeue();
             postFix = postFix + character;
@@ -63,7 +66,7 @@ public class to_be_deleted
 
         // Adding the rest of the operators in the stack into the string.
         size = operatorStack.size();
-        for (int i = 0; i < size; i++)
+        for (i = 0; i < size; i++)
         {
             character = operatorStack.pop();
             postFix = postFix + character;
@@ -88,13 +91,14 @@ public class to_be_deleted
    // hasHigherPrecedence checks which operator has higher precedence
    private static boolean hasHigherPrecedence(String op1, String op2)
    {
-       // Will return false if op2 has less precendence than op1, and return true if op2 has higher (or equal) precedence than op1.
-       int precedenceOp1 = getPrecedence(op1);
-       int precedenceOp2 = getPrecedence(op2);
-       if (precedenceOp1 > precedenceOp2)
-           return false;
-       else 
-           return true;
+        // Return true if op2 has HIGHER precedance than op1, return false otherwise.
+        int precedenceOp1 = getPrecedence(op1);
+        int precedenceOp2 = getPrecedence(op2);
+
+        if (precedenceOp2 > precedenceOp1)
+            return true;
+        else 
+            return false;
    }
 
    // getPrecedence is used to set up a precedence score to the operator passed
@@ -102,13 +106,14 @@ public class to_be_deleted
    {
        // BEDMAS
        String[] operators = {"^", "/", "*", "+", "-"};
-       int precedence = operators.length;
-       // the precedence for: "^" is 5, "/" is 4, ... , "-" is 1.
-       for (int i = 0; i < operators.length; i++)
-       {
-           if (operator.equals(operators[i]))
-               return precedence - i;
-       }
+
+        if (operator.equals(operators[0]))
+            return 5;
+        else if (operator.equals(operators[1]) || operator.equals(operators[2]))
+            return 4;
+        else if (operator.equals(operators[3]) || operator.equals(operators[4]))
+            return 3;
+        
        return -1;   // if operator is not in the operators array, return -1.
    }
 
@@ -157,7 +162,8 @@ public class to_be_deleted
    public static void main(String[] args)
    {
        String expression1 = "2+3*1";
-       String expression2 = "3*2^4-7";
+       String expression2 = "3*2^4-7+1-4+1*5";
+    // String expression2 = "3*2^4-7";
 
        String postfix1 = convertToPostfix(expression1);
        String postfix2 = convertToPostfix(expression2);

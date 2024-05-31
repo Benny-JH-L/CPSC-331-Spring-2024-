@@ -159,7 +159,6 @@ public class Modified_ShuntingYard_Evaluation
     {
         String expression1 = "2+3*1";
         String expression2 = "3*2^4-7";
-        // String expression2 = "3*2^4-7+1-4+1*5";      // to be deleted.
 
         String postfix1 = convertToPostfix(expression1);
         String postfix2 = convertToPostfix(expression2);

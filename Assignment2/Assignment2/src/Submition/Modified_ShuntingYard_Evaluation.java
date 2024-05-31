@@ -158,11 +158,8 @@ public class Modified_ShuntingYard_Evaluation
 
     public static void main(String[] args)
     {
-        System.out.printf("\n5/2 = %s", (5/2));
-        System.out.println("\n5%2 = " + (5 % 2) + "\n");
-
         String expression1 = "2+3*1";
-        String expression2 = "3*2^4-7";     // side note: numbers larger than 9, or less than 0, or are doubles can't be converted/calculated properly.
+        String expression2 = "3*2^4-7";
 
         String postfix1 = convertToPostfix(expression1);
         String postfix2 = convertToPostfix(expression2);

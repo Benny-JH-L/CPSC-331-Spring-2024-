@@ -8,16 +8,14 @@ import Submition.ADT.Queue;
  */
 public class to_be_deleted 
 {
-
     // Implement the steps of Modified Shunting Yard Algorithm here 
     public static String convertToPostfix(String expression)
     {
         Stack<String> operatorStack = new Stack<String>();
         Queue<String> queue = new Queue<String>();
-        int i = 0;
-        for (; i < expression.length(); i++)
+
+        for (int i = 0; i < expression.length(); i++)
         {
-            // System.out.printf("Executed #%s\n", i);
             String str = String.valueOf(expression.charAt(i));
             
             if (isOperand(str))         
@@ -41,10 +39,8 @@ public class to_be_deleted
                             queue.enqueue(poppedOperator);                  
                         }
                         else                                     
-                        {
-                            // operatorStack.add(str);      // will cause errors      
                             break;                                  
-                        }
+                        
                     }
                     operatorStack.add(str);                 
                 }
@@ -52,13 +48,11 @@ public class to_be_deleted
             else  
                 operatorStack.add(str);
         }
-
-        // System.out.printf("\nn = %s, expression size = %s\n", i, expression.length());
-
+        
         // Converting the queue elements into a string
         String postFix = "", character;
         int size = queue.size();
-        for (i = 0; i < size; i++)
+        for (int i = 0; i < size; i++)
         {
             character = queue.dequeue();
             postFix = postFix + character;
@@ -66,7 +60,7 @@ public class to_be_deleted
 
         // Adding the rest of the operators in the stack into the string.
         size = operatorStack.size();
-        for (i = 0; i < size; i++)
+        for (int i = 0; i < size; i++)
         {
             character = operatorStack.pop();
             postFix = postFix + character;

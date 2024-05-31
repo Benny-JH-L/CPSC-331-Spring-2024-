@@ -163,14 +163,11 @@ public class Modified_ShuntingYard_Evaluation
 
         String expression1 = "2+3*1";
         String expression2 = "3*2^4-7";     // side note: numbers larger than 9, or less than 0, or are doubles can't be converted/calculated properly.
-        String expression3 = "3*2^4-71";    // my test
 
         String postfix1 = convertToPostfix(expression1);
         String postfix2 = convertToPostfix(expression2);
-        String postfix3 = convertToPostfix(expression3);    // my test
 
         System.out.println(expression1 + " -> Postfix: " + postfix1 + " , Evaluation: " + evaluatePostfix(postfix1));
         System.out.println(expression2 + " -> Postfix: " + postfix2 + " , Evaluation: " + evaluatePostfix(postfix2));
-        System.out.println(expression3 + " -> Postfix: " + postfix3 + " , Evaluation: " + evaluatePostfix(postfix3));   // my test
     }
 }

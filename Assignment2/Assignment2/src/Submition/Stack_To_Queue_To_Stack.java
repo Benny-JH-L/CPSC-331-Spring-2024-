@@ -74,9 +74,7 @@ public class Stack_To_Queue_To_Stack
         // Generate random numbers and store them in thbe array
         for (int i = 0; i < randomNumbers.length; i++)
             randomNumbers[i] = random.nextInt(100) + 1;
-
-        // int[] randomNumbers = {66, 59, 60, 14, 82, 85, 47, 22, 92, 44}; // test case
-        
+                
         // Print the generated random numbers
         System.out.println("Unsorted Numbers numbers:");
         // Assignment version

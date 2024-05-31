@@ -22,7 +22,7 @@ public class Modified_ShuntingYard_Evaluation
             String str = String.valueOf(expression.charAt(i));    // Converting the character at index 'i' of the expression to a string.
             
             if (isOperand(str))         // Checking if the converted character is an operand.
-                queue.enqueue(str);     // if it is an operand, add it to the output queue.
+                queue.enqueue(str);     // if it is an operand, enqueue it to the output queue.
             else if (!operatorStack.isEmpty())              // otherwise, it is an operator.
             {
                 String topOperator = operatorStack.peek();
@@ -44,11 +44,11 @@ public class Modified_ShuntingYard_Evaluation
                         else                                        // otherwise, topOperator has less precedence than 'str'
                             break;                                  // exit the loop.
                     }
-                    operatorStack.add(str);                 // push the lowest precedence operator onto the stack.
+                    operatorStack.push(str);                 // push the lowest precedence operator onto the stack.
                 }
             }
             else    // push the operator to the stack if stack is empty
-                operatorStack.add(str);
+                operatorStack.push(str);
         }
 
         // Converting the queue elements into a string

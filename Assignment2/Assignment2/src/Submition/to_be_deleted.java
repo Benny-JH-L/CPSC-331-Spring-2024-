@@ -42,11 +42,11 @@ public class to_be_deleted
                             break;                                  
                         
                     }
-                    operatorStack.add(str);                 
+                    operatorStack.push(str);                 
                 }
             }
             else  
-                operatorStack.add(str);
+                operatorStack.push(str);
         }
         
         // Converting the queue elements into a string
@@ -157,7 +157,7 @@ public class to_be_deleted
    {
        String expression1 = "2+3*1";
        String expression2 = "3*2^4-7+1-4+1*5";
-    // String expression2 = "3*2^4-7";
+    //    String expression2 = "3*2^4-7";
 
        String postfix1 = convertToPostfix(expression1);
        String postfix2 = convertToPostfix(expression2);

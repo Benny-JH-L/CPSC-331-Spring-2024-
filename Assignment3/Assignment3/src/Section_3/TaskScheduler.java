@@ -33,7 +33,7 @@ public class TaskScheduler
         else
         {
             maxHeap[currentIndex] = task;   // Add the task to the specified index of the array
-            fixHeap(currentIndex);
+            fixAfterAdd(currentIndex);
         }
         currentIndex++;                     // Increment the index for the next task to be added in the heap (array)
         size++;
@@ -43,7 +43,7 @@ public class TaskScheduler
      * Fixes Max heap after adding a Task.
      * @param currentIndex an int. The index at which the new task was added.
      */
-    private void fixHeap(int currentIndex)
+    private void fixAfterAdd(int currentIndex)
     {
         Task task = maxHeap[currentIndex];
         while (currentIndex > 0)
@@ -63,9 +63,50 @@ public class TaskScheduler
         }
     }
 
-    public void removeTask()
+    /**
+     * Remove's a task using it's taskID.
+     * @param taskID a String, the taskID of the task that needs to be removed.
+     */
+    public void removeTask(String taskID)
     {
+        for (int i = 0; i < size; i++)
+        {
+            if (maxHeap[i].taskID.equals(taskID))
+            {
+                maxHeap[i] = null;  // prolly not needed
+                Task replacementTask = maxHeap[currentIndex-1]; // get the most recently added Task from the heap,
+                maxHeap[currentIndex-1] = null;                 // and remove it from that index,
+                maxHeap[i] = replacementTask;                   // then put it where the removed Task was located.
+                sink(i);                                        // fix the max-heap.
+                size--;
+                currentIndex--;                                 // decrement index of where a new task will be added. 
+            }
+        }
+    }
 
+    /**
+     * Fixes the max-heap after removing a Task.
+     */
+    private void sink(int currentIndex)
+    {
+        Task taskToCheck = maxHeap[currentIndex];
+        Task leftChild = maxHeap[2*currentIndex + 1];
+        Task rightChild = maxHeap[2*currentIndex + 2];
+
+        if (leftChild != null && leftChild.priority > taskToCheck.priority)
+        {
+            // Swap positions
+            maxHeap[currentIndex] = leftChild;
+            maxHeap[2*currentIndex + 1] = taskToCheck;
+            sink(2*currentIndex + 1);           // keep checking
+        }
+        else if (rightChild != null && rightChild.priority > taskToCheck.priority)
+        {
+            // Swap positions
+            maxHeap[currentIndex] = rightChild;
+            maxHeap[2*currentIndex + 2] = taskToCheck;
+            sink(2*currentIndex + 2);           // keep checking
+        }
     }
 
     // public Task getNextTask()
@@ -92,5 +133,9 @@ public class TaskScheduler
         scheduler.addTask(t3);
         Task t4 = new Task("104", 4, "Test new feature");
         scheduler.addTask(t4);
+
+        scheduler.printAllTasks();
+
+        scheduler.removeTask("103");    // removing task with Task ID: 103
     }
 }

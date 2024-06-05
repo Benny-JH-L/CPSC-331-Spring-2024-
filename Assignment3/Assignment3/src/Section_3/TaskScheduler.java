@@ -22,10 +22,14 @@ public class TaskScheduler
 
     /**
      * Constructor for TaskScheduler, creates an instance of this class. 
-     * @param heightOfHeap an int. The desired height of the Max heap.
+     * @param heightOfHeap an int. The max height of the Max heap.
+     * @throws Exception an exception, if heightOfHeap is negative.
      */
-    public TaskScheduler(int heightOfHeap)
+    public TaskScheduler(int heightOfHeap) throws Exception
     {
+        if (heightOfHeap < 0)
+            throw new Exception("Cannot have a Heap with a negative height.");
+        
         double maxNumNodes = Math.pow(2, heightOfHeap + 1) - 1;
         maxHeap = new Task[((int)maxNumNodes)];
         size = 0;
@@ -35,9 +39,13 @@ public class TaskScheduler
     /**
      * Inserts a new Task into the scheduler.
      * @param task a Task, to be added.
+     * @throws Exception an exception, if task is null.
      */
-    public void addTask(Task task)
+    public void addTask(Task task) throws Exception
     {
+        if (task == null)
+            throw new Exception("Cannot add a Null Task.");
+
         if (maxHeap[0] == null)
             maxHeap[0] = task;
         else
@@ -155,8 +163,9 @@ public class TaskScheduler
 
     /**
      * Prints all tasks in the scheduler in order of priority
+     * @throws Exception an exception.
      */
-    public void printAllTasks()
+    public void printAllTasks() throws Exception
     {
         // Create a copy of the Max heap and use the copy to print out the tasks in priority.
         TaskScheduler schedulerCopy = new TaskScheduler(maxHeightOfHeap);
@@ -173,7 +182,7 @@ public class TaskScheduler
         }
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         TaskScheduler scheduler = new TaskScheduler(3);
         Task t1 = new Task("101", 5, "Complete Project report");

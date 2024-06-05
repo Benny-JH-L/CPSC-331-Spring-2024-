@@ -1,5 +1,8 @@
 package Section_3;
 
+// CPSC 331 -Spring 2024- Assignment 3 | Advanced ADT With Applications
+// Name: Benny Liang | UCID: 30192142
+
 // implementation of the priority task scheduler and main method
 public class TaskScheduler 
 {
@@ -92,7 +95,8 @@ public class TaskScheduler
     }
 
     /**
-     * Fixes the Max heap after removing a Task.
+     * Fixes the Max heap after removing a Task. 
+     * @param currentIndex an int, the index where the most recent Task was inserted to to replace the previously removed Task.
      */
     private void sink(int currentIndex)
     {
@@ -105,7 +109,7 @@ public class TaskScheduler
         int leftChildPriority = Integer.MIN_VALUE, rightChildPriority = Integer.MIN_VALUE;
         Task leftChild = maxHeap[2*currentIndex + 1];
         Task rightChild = maxHeap[2*currentIndex + 2];
-        
+
         if (leftChild != null)
             leftChildPriority = leftChild.priority;    
         if (rightChild != null)
@@ -126,21 +130,6 @@ public class TaskScheduler
             maxHeap[2*currentIndex + 2] = taskToCheck;
             sink(2*currentIndex + 2);           // keep checking
         }
-        // Original:
-        // if (leftChild != null && leftChild.priority > taskToCheck.priority)
-        // {
-        //     // Swap positions
-        //     maxHeap[currentIndex] = leftChild;
-        //     maxHeap[2*currentIndex + 1] = taskToCheck;
-        //     sink(2*currentIndex + 1);           // keep checking
-        // }
-        // else if (rightChild != null && rightChild.priority > taskToCheck.priority)
-        // {
-        //     // Swap positions
-        //     maxHeap[currentIndex] = rightChild;
-        //     maxHeap[2*currentIndex + 2] = taskToCheck;
-        //     sink(2*currentIndex + 2);           // keep checking
-        // }
     }
 
     /**
@@ -203,7 +192,7 @@ public class TaskScheduler
 
         scheduler.printAllTasks();
 
-        scheduler.removeTask("103");    // removing task with Task ID: 103
+        scheduler.removeTask("103");
 
         scheduler.printAllTasks();
 

@@ -1,5 +1,8 @@
 package Section_3;
 
+// CPSC 331 -Spring 2024- Assignment 3 | Advanced ADT With Applications
+// Name: Benny Liang | UCID: 30192142
+
 public class Task 
 {
     String taskID;

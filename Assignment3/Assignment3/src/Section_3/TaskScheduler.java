@@ -196,11 +196,14 @@ public class TaskScheduler
 
         scheduler.printAllTasks();
 
+        System.out.println("\nAdding new Task with Task ID 105");
         Task t5 = new Task("105", 2, "Update documentation");
         scheduler.addTask(t5);
 
-        scheduler.printAllTasks();
+        Task retrievedTask = scheduler.getNextTask();
+        System.out.println("\nGetNextTask, retrieved Task: " + retrievedTask.toString());
 
+        System.out.println("\nRemoving Task with Task ID 103");
         scheduler.removeTask("103");
 
         scheduler.printAllTasks();

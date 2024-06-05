@@ -6,26 +6,33 @@ public class TaskScheduler
     private Task[] maxHeap;
 
     /**
-     * The current index that we will enqueue/add to the max heap.
+     * The current index that we will enqueue/add to the Max heap.
      */
     private int currentIndex;
 
     /**
-     * The size of the heap, number of Tasks currently in the heap.
+     * The size of the Max heap, number of Tasks currently in the heap.
      */
     private int size;
 
+    private int maxHeightOfHeap = 0;
+
     /**
      * Constructor for TaskScheduler, creates an instance of this class. 
-     * @param heightOfHeap an int. The height of the max heap.
+     * @param heightOfHeap an int. The desired height of the Max heap.
      */
     public TaskScheduler(int heightOfHeap)
     {
         double maxNumNodes = Math.pow(2, heightOfHeap + 1) - 1;
         maxHeap = new Task[((int)maxNumNodes)];
         size = 0;
+        maxHeightOfHeap = heightOfHeap;
     }
 
+    /**
+     * Inserts a new Task into the scheduler.
+     * @param task a Task, to be added.
+     */
     public void addTask(Task task)
     {
         if (maxHeap[0] == null)
@@ -49,7 +56,7 @@ public class TaskScheduler
         while (currentIndex > 0)
         {
             int parentIndex = (currentIndex - 1)/2;
-            Task parentTask =  maxHeap[parentIndex];
+            Task parentTask = maxHeap[parentIndex];
             if (task.priority > parentTask.priority)  
             // if the task we added has a larger priority value than its parent, swap them, and keep checking up the heap.
             {
@@ -73,53 +80,108 @@ public class TaskScheduler
         {
             if (maxHeap[i].taskID.equals(taskID))
             {
-                maxHeap[i] = null;  // prolly not needed
-                Task replacementTask = maxHeap[currentIndex-1]; // get the most recently added Task from the heap,
-                maxHeap[currentIndex-1] = null;                 // and remove it from that index,
-                maxHeap[i] = replacementTask;                   // then put it where the removed Task was located.
-                sink(i);                                        // fix the max-heap.
+                Task replacementTask = maxHeap[currentIndex - 1];   // get the most recently added Task from the heap,
+                maxHeap[currentIndex - 1] = null;                   // and remove it from that index,
+                maxHeap[i] = replacementTask;                       // then put it where the removed Task was located.
+                sink(i);                                            // fix the max-heap.
                 size--;
-                currentIndex--;                                 // decrement index of where a new task will be added. 
+                currentIndex--;                                     // decrement index of where a new task will be added. 
+                break;
             }
         }
     }
 
     /**
-     * Fixes the max-heap after removing a Task.
+     * Fixes the Max heap after removing a Task.
      */
     private void sink(int currentIndex)
     {
         Task taskToCheck = maxHeap[currentIndex];
+
+        // There is no need to fix the Max heap since it is empty.
+        if (taskToCheck == null)
+            return;
+
+        int leftChildPriority = Integer.MIN_VALUE, rightChildPriority = Integer.MIN_VALUE;
         Task leftChild = maxHeap[2*currentIndex + 1];
         Task rightChild = maxHeap[2*currentIndex + 2];
-
-        if (leftChild != null && leftChild.priority > taskToCheck.priority)
+        
+        if (leftChild != null)
+            leftChildPriority = leftChild.priority;    
+        if (rightChild != null)
+            rightChildPriority = rightChild.priority;
+        
+        // Swap posiiton with greater priority child if the task we are checking also has less priority than that child.
+        if (leftChildPriority > rightChildPriority && leftChildPriority > taskToCheck.priority)
         {
-            // Swap positions
+            // Swap positions with left child
             maxHeap[currentIndex] = leftChild;
             maxHeap[2*currentIndex + 1] = taskToCheck;
             sink(2*currentIndex + 1);           // keep checking
         }
-        else if (rightChild != null && rightChild.priority > taskToCheck.priority)
+        else if (rightChildPriority > taskToCheck.priority)
         {
-            // Swap positions
+            // Swap positions with right child
             maxHeap[currentIndex] = rightChild;
             maxHeap[2*currentIndex + 2] = taskToCheck;
             sink(2*currentIndex + 2);           // keep checking
         }
+        // Original:
+        // if (leftChild != null && leftChild.priority > taskToCheck.priority)
+        // {
+        //     // Swap positions
+        //     maxHeap[currentIndex] = leftChild;
+        //     maxHeap[2*currentIndex + 1] = taskToCheck;
+        //     sink(2*currentIndex + 1);           // keep checking
+        // }
+        // else if (rightChild != null && rightChild.priority > taskToCheck.priority)
+        // {
+        //     // Swap positions
+        //     maxHeap[currentIndex] = rightChild;
+        //     maxHeap[2*currentIndex + 2] = taskToCheck;
+        //     sink(2*currentIndex + 2);           // keep checking
+        // }
     }
 
-    // public Task getNextTask()
-    // {
+    /**
+     * Returns and removes the highest priority task from the scheduler. 
+     * @return the highest priority Task.
+     */
+    public Task getNextTask()
+    {
+        Task returnTask = null;
 
-    // }
+        if (currentIndex > 0)
+        {
+            returnTask = maxHeap[0];
+            maxHeap[0] = maxHeap[currentIndex - 1];
+            maxHeap[currentIndex - 1] = null;
+            sink(0);                   // fix Max heap
+            size--;
+            currentIndex--;
+        }
+
+        return returnTask;
+    }
 
     /**
      * Prints all tasks in the scheduler in order of priority
      */
     public void printAllTasks()
     {
+        // Create a copy of the Max heap and use the copy to print out the tasks in priority.
+        TaskScheduler schedulerCopy = new TaskScheduler(maxHeightOfHeap);
 
+        for (int i = 0; i < size; i++)
+            schedulerCopy.addTask(maxHeap[i]);
+
+        System.out.println("\n---Print All Tasks---");
+        Task nextTask = schedulerCopy.getNextTask();
+        while (nextTask != null)
+        {
+            System.out.println(nextTask.toString());
+            nextTask = schedulerCopy.getNextTask();
+        }
     }
 
     public static void main(String[] args)
@@ -136,6 +198,21 @@ public class TaskScheduler
 
         scheduler.printAllTasks();
 
+        Task t5 = new Task("105", 2, "Update documentation");
+        scheduler.addTask(t5);
+
+        scheduler.printAllTasks();
+
         scheduler.removeTask("103");    // removing task with Task ID: 103
+
+        scheduler.printAllTasks();
+
+        System.out.println("\n---GetNextTask & Print---");
+        Task nextTask = scheduler.getNextTask();
+        while (nextTask != null)
+        {
+            System.out.println(nextTask.toString());
+            nextTask = scheduler.getNextTask();
+        }
     }
 }

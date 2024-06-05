@@ -11,6 +11,11 @@ public class TaskScheduler
     private int currentIndex;
 
     /**
+     * The size of the heap, number of Tasks currently in the heap.
+     */
+    private int size;
+
+    /**
      * Constructor for TaskScheduler, creates an instance of this class. 
      * @param heightOfHeap an int. The height of the max heap.
      */
@@ -18,6 +23,7 @@ public class TaskScheduler
     {
         double maxNumNodes = Math.pow(2, heightOfHeap + 1) - 1;
         maxHeap = new Task[((int)maxNumNodes)];
+        size = 0;
     }
 
     public void addTask(Task task)
@@ -30,6 +36,7 @@ public class TaskScheduler
             fixHeap(currentIndex);
         }
         currentIndex++;                     // Increment the index for the next task to be added in the heap (array)
+        size++;
     }
 
     /**
@@ -39,7 +46,7 @@ public class TaskScheduler
     private void fixHeap(int currentIndex)
     {
         Task task = maxHeap[currentIndex];
-        while (true)
+        while (currentIndex > 0)
         {
             int parentIndex = (currentIndex - 1)/2;
             Task parentTask =  maxHeap[parentIndex];
@@ -67,7 +74,7 @@ public class TaskScheduler
     // }
 
     /**
-     * Prints all tasks in the scheduler in orer of priority
+     * Prints all tasks in the scheduler in order of priority
      */
     public void printAllTasks()
     {

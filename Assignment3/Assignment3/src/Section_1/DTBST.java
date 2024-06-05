@@ -6,7 +6,7 @@ import java.util.List;
 public class DTBST 
 {
     // ------------------ Other Classes needed for DTBST ------------------
-    public class Event
+    public class Event  // not sure if i need to put these into their own files
     {
         String name;
         int startTime;  // Start time of the event, in minutes since midnight 
@@ -27,7 +27,7 @@ public class DTBST
         }
     }
 
-    public class TreeNode
+    public class TreeNode // not sure if i need to put these into their own files
     {
         Event event;
         TreeNode left, right;

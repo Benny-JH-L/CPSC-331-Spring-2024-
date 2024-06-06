@@ -11,6 +11,9 @@ public class ParkingLot
     public ParkingLot()
     {
         parkingLot = new LinkedList[LEN];
+
+        for (int i = 0; i < LEN; i++)
+            parkingLot[i] = new LinkedList<>();
     }
 
 }

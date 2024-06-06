@@ -12,7 +12,7 @@ public class ParkingLotManager
     public ParkingLotManager()
     {
         parkingLotInstance = new ParkingLot();
-        parkingLot = parkingLotInstance.parkingLot;
+        this.parkingLot = parkingLotInstance.parkingLot;
     }
 
     /**
@@ -55,22 +55,36 @@ public class ParkingLotManager
      * parking spot. Otherwise, print a message indicating that no car with this license
      * plate was found in the hash table.
      * 
-     * @param licesnePlate a String.
+     * @param licensePlate a String.
      * @return a String, the corresponding parking spot for this Car.
      */
-    public String retrieve(String licesnePlate)
+    public String retrieve(String licensePlate)
     {
-        int hashValue = hashValue(licesnePlate);
+        return retrievePrivate(licensePlate, true);
+    }
+
+    /**
+     * Private method of retrieve. 'doPrint' is True, Print message if Car with 'licensePlate' was not found in the hash table, 
+     * otherwise do not print message.
+     * @param licesnePlate a String.
+     * @param doPrint a boolean, true if you want to print message, false otherwise.
+     * @return a String, the corresponding parking spot for this Car.
+     */
+    private String retrievePrivate(String licensePlate, boolean doPrint)
+    {
+        int hashValue = hashValue(licensePlate);
         LinkedList<Car> levelParkedCars = parkingLot[hashValue];
 
-        for (int i = 0; i < levelParkedCars.size() - 1; i++)
+        for (int i = 0; i < levelParkedCars.size(); i++)
         {
             String licensePlateToCheck = levelParkedCars.get(i).licensePlate;
-            if (licensePlateToCheck.equals(licesnePlate))
+            if (licensePlateToCheck.equals(licensePlate))
                 return levelParkedCars.get(i).parkingSpot;            
         }
 
-        System.out.printf("\nNo Car with license plate '%s' was found in the hash table.", licesnePlate);
+        if (doPrint)    // Print the message
+            System.out.printf("\nNo Car with license plate '%s' was found in the hash table.", licensePlate);
+        
         return null;
     }
 
@@ -89,7 +103,7 @@ public class ParkingLotManager
      */
     public void insert(String licensePlate, String parkingSpot)
     {
-        String possibleParkedSpot = retrieve(licensePlate);
+        String possibleParkedSpot = retrievePrivate(licensePlate, false);   // Do not want to print message if no car with 'licensePlate' was not found in hash table. 
         int hashValue = hashValue(licensePlate);                // level, index of 'parkingLot' array
 
         // If retrieving did not result in a null parking spot, the Car with this licesnce plate is parked --> update parking spot.
@@ -98,7 +112,7 @@ public class ParkingLotManager
             LinkedList<Car> levelOfParkedCars = parkingLot[hashValue];
 
             // Go through linked list until we find the Car with the specified 'licensePlate'
-            for (int i = 0; i < levelOfParkedCars.size() - 1; i++)
+            for (int i = 0; i < levelOfParkedCars.size(); i++)
             {
                 if (levelOfParkedCars.get(i).licensePlate.equals(licensePlate))
                 {
@@ -128,7 +142,26 @@ public class ParkingLotManager
      */
     public void delete(String licensePlate)
     {
+        String possibleParkedSpot = retrieve(licensePlate);
 
+        // If the Car this this 'licensePlate' exists in the hash table, remove the Car from the hash table.
+        if (possibleParkedSpot != null)
+        {
+            int hashValue = hashValue(licensePlate);
+
+            // Going through the linked list and find the Car with the specified license plate.
+            for (int i = 0; i < parkingLot[hashValue].size(); i++)
+            {
+                Car carToCheck = parkingLot[hashValue].get(i);
+
+                if (carToCheck.licensePlate.equals(licensePlate))   // Found the Car, and remove it.
+                {
+                    parkingLot[hashValue].remove(i);                // removing the Car from the linked list.
+                    break;
+                }
+            }
+        }
+        // If there is no Car with this 'licensePlate' exists in the hash table, retrieve(...) method call will print the message.
     }
 
     /**
@@ -145,6 +178,36 @@ public class ParkingLotManager
     @Override
     public String toString()
     {
+        String returnStr = "\n----ParkingLot----\n";
+        LinkedList<Car> levelOfParkedCars;
 
+        for (int i = 0; i < parkingLot.length - 1; i++) // Loop through LinkedList<Car>[] array indicies
+        {
+            levelOfParkedCars = parkingLot[i];
+            returnStr += i + ": [";
+
+            for (int k = 0; k < levelOfParkedCars.size(); k++)  // Loop through LinkedList<Car> elements
+            {
+                Car car = levelOfParkedCars.get(k);
+                String s = car.licensePlate + ":" + car.parkingSpot;
+                
+                if (k + 1 != parkingLot[i].size())              // don't add a comma if it is the last element
+                    s += ", ";
+                returnStr += s;
+            }
+            returnStr += "]\n";
+        }
+
+        return returnStr;
+    }
+
+    public static void main(String[] args) 
+    {
+        ParkingLotManager manager = new ParkingLotManager();
+        manager.insert("AB1234", "1-23");
+        manager.insert("CD5678", "2-45");
+        manager.insert("EF9012", "3-12");
+        manager.insert("GH3456", "1-34");
+        System.out.println(manager.toString());
     }
 }

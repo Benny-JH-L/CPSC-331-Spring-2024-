@@ -181,7 +181,7 @@ public class ParkingLotManager
         String returnStr = "\n----ParkingLot----\n";
         LinkedList<Car> levelOfParkedCars;
 
-        for (int i = 0; i < parkingLot.length - 1; i++) // Loop through LinkedList<Car>[] array indicies
+        for (int i = 0; i < parkingLot.length; i++) // Loop through LinkedList<Car>[] array indicies
         {
             levelOfParkedCars = parkingLot[i];
             returnStr += i + ": [";

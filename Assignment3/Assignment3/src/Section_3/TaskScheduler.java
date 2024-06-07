@@ -212,7 +212,7 @@ public class TaskScheduler
         Task nextTask = scheduler.getNextTask();
         while (nextTask != null)
         {
-            System.out.println(nextTask.toString());
+            System.out.println("Retrieved: " + nextTask.toString());
             nextTask = scheduler.getNextTask();
         }
     }

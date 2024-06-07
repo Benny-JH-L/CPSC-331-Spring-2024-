@@ -16,52 +16,58 @@ public class EventRobot
     */
     public int minimumCharge(int[][] pathways, int n, int headquarters) 
     {
-        int[] pathCostArr = new int[n];     // Used to store the minimum cost needed to get from starting vertex to other verticies  
+        int[] pathCostArr = new int[n];                 // Used to store the minimum cost needed to get from starting building to other buildings  
 
         for (int i = 0; i < pathCostArr.length; i++)
-            pathCostArr[i] = Integer.MAX_VALUE;     // Set cost of verticies to +INFINITY initilly
+            pathCostArr[i] = Integer.MAX_VALUE;         // Set cost to get to buildings to +INFINITY initially
         
-        // Set cost from starting building
         LinkedList<int[]> startBuildingPaths = getOutgoingPaths(pathways, headquarters);
         
-        while (!startBuildingPaths.isEmpty())
+        while (!startBuildingPaths.isEmpty())           // Set cost from starting building.
         {
-            int[] path = startBuildingPaths.remove();   // get an outgoing path from headquarters
+            int[] path = startBuildingPaths.remove();   // get an outgoing path from headquarters building
             int toBuildingNum = path[1];                // get building number that path is going to
-            pathCostArr[toBuildingNum - 1] = path[2];   // set the cost from headquarters to this building
+            pathCostArr[toBuildingNum - 1] = path[2];   // set the cost from headquarters to this building (ie cost to get to this building).
         }
 
-        // Iterate through every building and determine the cost to get there
+        // Iterate through every building and every pathway to determine the minimum cost for each building
         for (int i = 0; i < n; i++)                 
         {
             int[] prevPathCostArr = pathCostArr.clone();        // 'pathCostArr' before entering the inner-for-loop
-            for (int k = 0; k < pathways.length; k++)           // Iterate through the pathways
+            for (int k = 0; k < pathways.length; k++)           // Iterate through every pathway
             {
                 int[] currentPath = pathways[k];
-                int currentBuildingNum = currentPath[0];    
+                int currentBuildingNum = currentPath[0];        // building whose outgoing edges will be checked
 
                 if (pathCostArr[currentBuildingNum - 1] == Integer.MAX_VALUE)       // if the cost to get to this building is +INFINITY,  (minus 1 because array starts at 0 and building count start at 1)
                     continue;                                                       // check next building (Cost to this building is not yet determined)
                 else                                                                // Otherwise, a path/cost to this building has been determined.
-                    updateCost(pathways, pathCostArr, currentBuildingNum);
+                    updateCost(pathways, pathCostArr, currentBuildingNum);          // Update the cost.
             }
 
-            if (prevPathCostArr.equals(pathCostArr))                                // break earlier if no change happens
-                break;
+            // if (prevPathCostArr.equals(pathCostArr))                                // break earlier if no change in costs
+            //     break;
         }
 
+        // Determine the minimum cost for a robot to get to any building.
         int minCost = -1;
 
         for (int i = 0; i < pathCostArr.length; i++)
         {
-            if ((pathCostArr[i] != Integer.MAX_VALUE) && pathCostArr[i] > minCost)
+            if ((pathCostArr[i] != Integer.MAX_VALUE) && pathCostArr[i] > minCost)  // if the cost is +INFINITY, then there is no path to get to that building.
                 minCost = pathCostArr[i];
         }
 
         return minCost; 
     }
 
-    protected static LinkedList<int[]> getOutgoingPaths(int[][] pathways, int buildingNum)  // protected static for now
+    /**
+     * Gets the outgoing paths of a building.
+     * @param pathways an int[][], 2D-integer array that contains all pathways in a directed graph.
+     * @param buildingNum an int, the building number whose outgoing edges is wanted.
+     * @return a LinkedList<int[]> containing all the outgoing paths of the specified building.
+     */
+    private LinkedList<int[]> getOutgoingPaths(int[][] pathways, int buildingNum)
     {
         LinkedList<int[]> returnList = new LinkedList<>();
 
@@ -74,49 +80,59 @@ public class EventRobot
         return returnList;
     }
 
+    /**
+     * Updates the cost of outgoing buildings using the outgoing paths of the building number entered in as the parameter.
+     * @param pathways an int[][], 2D-integer array that contains all pathways in a directed graph.
+     * @param pathCostArr an int[], containing the costs to get to all the buildings in the directed graph.
+     * @param currentBuildingNum an int, the building to get outgoing edges from.
+     */
     private void updateCost(int[][] pathways, int[] pathCostArr, int currentBuildingNum)
     {
-        LinkedList<int[]> buildingPaths = getOutgoingPaths(pathways, currentBuildingNum);    // get the paths outgoing from this building.
+        LinkedList<int[]> buildingPaths = getOutgoingPaths(pathways, currentBuildingNum);   // get the paths outgoing from this building.
 
-        while (!buildingPaths.isEmpty())
+        while (!buildingPaths.isEmpty())                                                    // iterate through all this building's outgoing edges.
         {
             int[] outgoingPath = buildingPaths.remove();
-            int toBuildingNum = outgoingPath[1] - 1;                                    // get building number we are traversing to, subtract 1 to get 'pathCostArr' location
+            int toBuildingNum = outgoingPath[1] - 1;                                        // get building number we are traversing to, subtract 1 to get 'pathCostArr' location
             int costToBuilding = pathCostArr[currentBuildingNum - 1] + outgoingPath[2];     // Add the cost to get to this building and the cost of path to get to other building,
 
-            if (costToBuilding < pathCostArr[toBuildingNum])                            // if the resulting cost is less than the current cost to get to this building, set cost to resulting cost.
+            if (costToBuilding < pathCostArr[toBuildingNum])                                // if the resulting cost is less than the current cost to get to this building, set cost to resulting cost.
                 pathCostArr[toBuildingNum] = costToBuilding;
         }
     }
 
-    public static void main(String[] args) 
-    {
-        // Sample Inputs and Outputs
+    /**
+     * Used to print the Sample Inputs and Outputs.
+     * @param args a String[].
+     */
+    // public static void main(String[] args) 
+    // {
+    //     // Sample Inputs and Outputs
 
-        // Example 1
-        int[][] pathways1 = {{1,2,4}};
-        int headquarters1 = 1;
-        int n1 = 2;
-        printSampleExample(1, pathways1, n1, headquarters1);
+    //     // Example 1
+    //     int[][] pathways1 = {{1,2,4}};
+    //     int headquarters1 = 1;
+    //     int n1 = 2;
+    //     printSampleExample(1, pathways1, n1, headquarters1);
 
-        // Example 2
-        int[][] pathways2 = pathways1;
-        int headquarters2 = 2;
-        int n2 = 2;
-        printSampleExample(2, pathways2, n2, headquarters2);
+    //     // Example 2
+    //     int[][] pathways2 = pathways1;
+    //     int headquarters2 = 2;
+    //     int n2 = 2;
+    //     printSampleExample(2, pathways2, n2, headquarters2);
 
-        // Example 3
-        int[][] pathways3 = {{2,1,3}, {2,3,2}, {3,4,5}};
-        int headquarters3 = 2;
-        int n3 = 4;
-        printSampleExample(3, pathways3, n3, headquarters3);
+    //     // Example 3
+    //     int[][] pathways3 = {{2,1,3}, {2,3,2}, {3,4,5}};
+    //     int headquarters3 = 2;
+    //     int n3 = 4;
+    //     printSampleExample(3, pathways3, n3, headquarters3);
 
-        // Example 4
-        int[][] pathways4 = {{2,1,3}, {2,3,4}, {3,4,-2}, {2,4,5}};
-        int headquarters4 = 2;
-        int n4 = 4;
-        printSampleExample(4, pathways4, n4, headquarters4);
-    }
+    //     // Example 4
+    //     int[][] pathways4 = {{2,1,3}, {2,3,4}, {3,4,-2}, {2,4,5}};
+    //     int headquarters4 = 2;
+    //     int n4 = 4;
+    //     printSampleExample(4, pathways4, n4, headquarters4);
+    // }
 
     private static void printSampleExample(int exampleNum, int[][] pathways, int n, int headquarters)
     {
@@ -125,6 +141,11 @@ public class EventRobot
         System.out.printf("\nExample %d) \npathways = %s | n = %d, headquarters = %d \nMinimum Cost is: %d\n", exampleNum, pathwaysToString(pathways), n, headquarters, minCharge);
     }
 
+    /**
+     * Converts the pathways array to a readable string for humans.
+     * @param array an int[][], 2D-integer array that contains all pathways in a directed graph.
+     * @return a String.
+     */
     private static String pathwaysToString(int[][] array)
     {
         String returnStr = "[";

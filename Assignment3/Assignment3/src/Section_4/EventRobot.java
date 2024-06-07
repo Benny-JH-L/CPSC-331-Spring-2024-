@@ -57,7 +57,7 @@ public class EventRobot
 
         for (int i = 0; i < pathCostArr.length; i++)
         {
-            if ((pathCostArr[i] != Integer.MAX_VALUE) && pathCostArr[i] > minCost)  // if the cost is +INFINITY, then there is no path to get to that building.
+            if ((pathCostArr[i] != Integer.MAX_VALUE) && pathCostArr[i] > minCost)  // if the cost is +INFINITY, then there is no path to get to that building from the starting building.
                 minCost = pathCostArr[i];
         }
 

@@ -2,6 +2,9 @@ package Section_4;
 
 import java.util.LinkedList;
 
+// CPSC 331 -Spring 2024- Assignment 3 | Advanced ADT With Applications
+// Name: Benny Liang | UCID: 30192142
+
 public class EventRobot 
 {
     /**

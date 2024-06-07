@@ -3,6 +3,9 @@ package Section_1;
 import java.util.ArrayList;
 import java.util.List;
 
+// CPSC 331 -Spring 2024- Assignment 3 | Advanced ADT With Applications
+// Name: Benny Liang | UCID: 30192142
+
 public class DTBST 
 {
     // ------------------ Other Classes needed for DTBST ------------------

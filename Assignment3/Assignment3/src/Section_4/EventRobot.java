@@ -105,7 +105,7 @@ public class EventRobot
     }
 
     /**
-     * Used to print the Sample Inputs and Outputs.
+     * Used to print the Sample Inputs and Outputs outlined in the assignment.
      * @param args a String[].
      */
     // public static void main(String[] args) 

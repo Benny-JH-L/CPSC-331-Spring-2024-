@@ -3,6 +3,9 @@ package Section_2;
 import java.util.LinkedList;
 import Section_2.Car;
 
+// CPSC 331 -Spring 2024- Assignment 3 | Advanced ADT With Applications
+// Name: Benny Liang | UCID: 30192142
+
 // Containing the main method for tesing
 public class ParkingLotManager 
 {
@@ -43,6 +46,15 @@ public class ParkingLotManager
      */
     public boolean search(String licensePlate)
     {
+        int hashValue = hashValue(licensePlate);
+        LinkedList<Car> levelOfParkedCars = parkingLot[hashValue];
+
+        for (int i = 0; i < levelOfParkedCars.size(); i++)
+        {
+            if (levelOfParkedCars.get(i).licensePlate.equals(licensePlate))
+                return true;
+        }
+
         return false;
     }
 
@@ -60,18 +72,6 @@ public class ParkingLotManager
      */
     public String retrieve(String licensePlate)
     {
-        return retrievePrivate(licensePlate, true);
-    }
-
-    /**
-     * Private method of retrieve. 'doPrint' is True, Print message if Car with 'licensePlate' was not found in the hash table, 
-     * otherwise do not print message.
-     * @param licesnePlate a String.
-     * @param doPrint a boolean, true if you want to print message, false otherwise.
-     * @return a String, the corresponding parking spot for this Car.
-     */
-    private String retrievePrivate(String licensePlate, boolean doPrint)
-    {
         int hashValue = hashValue(licensePlate);
         LinkedList<Car> levelParkedCars = parkingLot[hashValue];
 
@@ -82,11 +82,36 @@ public class ParkingLotManager
                 return levelParkedCars.get(i).parkingSpot;            
         }
 
-        if (doPrint)    // Print the message
-            System.out.printf("\nNo Car with license plate '%s' was found in the hash table.", licensePlate);
+        // Print the message
+        System.out.printf("\nNo Car with license plate '%s' was found in the hash table.", licensePlate);
         
-        return null;
+        return null;    
     }
+
+    // /**
+    //  * Private method of retrieve. 'doPrint' is True, Print message if Car with 'licensePlate' was not found in the hash table, 
+    //  * otherwise do not print message.
+    //  * @param licesnePlate a String.
+    //  * @param doPrint a boolean, true if you want to print message, false otherwise.
+    //  * @return a String, the corresponding parking spot for this Car.
+    //  */
+    // private String retrievePrivate(String licensePlate, boolean doPrint)
+    // {
+    //     int hashValue = hashValue(licensePlate);
+    //     LinkedList<Car> levelParkedCars = parkingLot[hashValue];
+
+    //     for (int i = 0; i < levelParkedCars.size(); i++)
+    //     {
+    //         String licensePlateToCheck = levelParkedCars.get(i).licensePlate;
+    //         if (licensePlateToCheck.equals(licensePlate))
+    //             return levelParkedCars.get(i).parkingSpot;            
+    //     }
+
+    //     if (doPrint)    // Print the message
+    //         System.out.printf("\nNo Car with license plate '%s' was found in the hash table.", licensePlate);
+        
+    //     return null;
+    // }
 
     /**
      * Precondition: 
@@ -103,11 +128,12 @@ public class ParkingLotManager
      */
     public void insert(String licensePlate, String parkingSpot)
     {
-        String possibleParkedSpot = retrievePrivate(licensePlate, false);   // Do not want to print message if no car with 'licensePlate' was not found in hash table. 
+        // String possibleParkedSpot = retrievePrivate(licensePlate, false);   // Do not want to print message if no car with 'licensePlate' was not found in hash table. 
+        boolean carIsParked = search(licensePlate);
         int hashValue = hashValue(licensePlate);                // level, index of 'parkingLot' array
 
-        // If retrieving did not result in a null parking spot, the Car with this licesnce plate is parked --> update parking spot.
-        if (possibleParkedSpot != null)
+        // If searching results in true, the Car with this licesnce plate is parked --> update parking spot.
+        if (carIsParked)
         {
             LinkedList<Car> levelOfParkedCars = parkingLot[hashValue];
 
@@ -121,7 +147,7 @@ public class ParkingLotManager
                 }
             }
         }
-        // If it did result in a null parking spot result, the Car with this license plate is not parked --> add it to the appropriate linked list in hash table.
+        // Otherwise the Car with this licensePlate is not parked --> add it to the appropriate linked list in hash table.
         else
         {
             Car newCar = new Car(licensePlate, parkingSpot);

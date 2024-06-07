@@ -36,7 +36,7 @@ public class EventRobot
         // Iterate through every building and every pathway to determine the minimum cost for each building
         for (int i = 0; i < n; i++)                 
         {
-            int[] prevPathCostArr = pathCostArr.clone();        // 'pathCostArr' before entering the inner-for-loop
+            // int[] prevPathCostArr = pathCostArr.clone();        // 'pathCostArr' before entering the inner-for-loop
             for (int k = 0; k < pathways.length; k++)           // Iterate through every pathway
             {
                 int[] currentPath = pathways[k];
@@ -74,10 +74,10 @@ public class EventRobot
     {
         LinkedList<int[]> returnList = new LinkedList<>();
 
-        for (int i = 0; i < pathways.length; i++)
+        for (int i = 0; i < pathways.length; i++)           // Go through each pathway,
         {
-            if (pathways[i][0] == buildingNum)
-                returnList.add(pathways[i]);
+            if (pathways[i][0] == buildingNum)              // If a pathways[i][0] == 'buildingNum' 
+                returnList.add(pathways[i]);                // add it to the return LinkedList<int[]>.
         }
 
         return returnList;

@@ -8,45 +8,6 @@ import java.util.List;
 
 public class DTBST 
 {
-    // ------------------ Other Classes needed for DTBST ------------------
-    public class Event  // not sure if i need to put these into their own files
-    {
-        String name;
-        int startTime;  // Start time of the event, in minutes since midnight 
-        // - to be used as the key to sort events in the BST
-        int duration;   // Duration of the event, in minutes
-
-        public Event (String name, int startTime, int duration)
-        {
-            this.name = name;
-            this.startTime = startTime;
-            this.duration = duration;
-        }
-
-        @Override
-        public String toString()
-        {
-            return name + " starts at " + startTime + " for " + duration + " minutes.";
-        }
-    }
-
-    public class TreeNode // not sure if i need to put these into their own files
-    {
-        Event event;
-        TreeNode left, right;
-        boolean leftThread, rightThread;
-
-        public TreeNode(Event event)
-        {
-            this.event = event;
-            this.left = null;
-            this.right = null;
-            this.leftThread = true;
-            this.rightThread = true;
-        }
-    }
-
-    // ------------------ End of Other Classes needed for DTBST ------------------
 
     private TreeNode root = null;
 
@@ -74,27 +35,101 @@ public class DTBST
     {
         boolean returnBool = false;
         TreeNode nn = new TreeNode(event);
+        nn.leftThread = false;   //?
+        nn.rightThread = false;  //?
         if (root == null)
         {
-            nn.leftThread = false;   //?
-            nn.rightThread = false;  //?
+            // nn.leftThread = false;   //?
+            // nn.rightThread = false;  //?
             root = nn;
         }
         else
         {
-            if (event.startTime < root.event.startTime)
-                returnBool = recursiveAddEvent(event, root, root.left);
-            else if (event.startTime > root.event.startTime)
-                returnBool = recursiveAddEvent(event, root, root.right);
-            else // If the event to be added has a startTime that's the same as the root's startTime --> conflit.
-                System.out.println("Conflict");
+            returnBool = recursiveAddEvent(root, nn);
+            // BAD---
+            // if (event.startTime < root.event.startTime)
+            //     returnBool = recursiveAddEvent(event, root, root.left);
+            // else if (event.startTime > root.event.startTime)
+            //     returnBool = recursiveAddEvent(event, root, root.right);
+            // else // If the event to be added has a startTime that's the same as the root's startTime --> conflit.
+            //     System.out.println("Conflict");
         }
         return returnBool;
     }
 
-    private boolean recursiveAddEvent(Event event, TreeNode parentNode, TreeNode childNode)
+
+    protected boolean recursiveAddEvent(TreeNode root, TreeNode nodeToAdd)      // change to private
     {
-        // code
+        if (checkConflict(root.event, nodeToAdd.event))    
+        {
+            System.out.println("Conflict");
+            return false;
+        }
+        // If 'nodeToAdd' event's start time is < its root's event start time, go to left subtree and keep checking
+        else if (nodeToAdd.event.startTime < root.event.startTime)
+        {
+            TreeNode leftChild = root.left;
+            if (leftChild != null)                          // If left child is not null, keep checking
+                recursiveAddEvent(leftChild, nodeToAdd);
+            else                                            // Otherwise, add the node here
+            {
+                if (root.leftThread == true)                // Set left thread of nodeToAdd
+                {
+                    nodeToAdd.left = root.left;
+                    nodeToAdd.leftThread = true;
+                    root.leftThread = false;
+                }
+
+                root.left = nodeToAdd;
+                nodeToAdd.right = root;                     // Right thread to it's parent
+                nodeToAdd.rightThread = true;
+
+                return true;                                // Node added successfully
+            }
+        }
+        // Otherwise, 'nodeToAdd' event's start time is >= its root's event start time, go to right subtree and keep checking
+        else
+        {
+            TreeNode rightChild = root.right;
+            if (rightChild != null)                         // If right child is not null, keep checking
+                recursiveAddEvent(rightChild, nodeToAdd);
+            else                                            // otherwise, add node here
+            {
+                if (root.rightThread ==  true)              // set right thread of nodeToAdd
+                {
+                    nodeToAdd.right = root.right;
+                    nodeToAdd.rightThread = true;
+                    root.rightThread = false;
+                }
+
+                root.right = nodeToAdd;
+                nodeToAdd.left = root;                      // Left thread to it's parent
+                nodeToAdd.leftThread = true;
+
+                return true;                                // Node added successfully
+            }
+        }
+        
+        return false;                                // Node not added successfully for whatever reason.
+    }
+    
+    /**
+     * Checks if there is a conflict between two Events, 'rootEvent' and 'eventToCheck'.
+     * @param rootEvent an Event, the root event already in the DTBST.
+     * @param eventToCheck an Event, the Event to be added.
+     * @return a boolean. Returns true if 'eventToCheck' conflicts with 'rootEvent', otherwise returns false.
+     */
+    protected boolean checkConflict(Event rootEvent, Event eventToCheck)    // change to private
+    {
+        int rootEndTime = rootEvent.startTime + rootEvent.duration;
+        
+        // if the eventToCheck's start time is > rootEvent's start time And 
+        // eventToCheck's start time < rootEvent's end time, then we have a conflict
+        if (eventToCheck.startTime > rootEvent.startTime && eventToCheck.startTime < rootEndTime)
+            return true;
+        
+        // Otherwise there is no conflict.
+        return false;
     }
 
     /**
@@ -281,3 +316,43 @@ public class DTBST
     }
     
 }
+
+    // ------------------ Other Classes needed for DTBST ------------------
+    class Event
+    {
+        String name;
+        int startTime;  // Start time of the event, in minutes since midnight 
+        // - to be used as the key to sort events in the BST
+        int duration;   // Duration of the event, in minutes
+
+        public Event (String name, int startTime, int duration)
+        {
+            this.name = name;
+            this.startTime = startTime;
+            this.duration = duration;
+        }
+
+        @Override
+        public String toString()
+        {
+            return name + " starts at " + startTime + " for " + duration + " minutes.";
+        }
+    }
+
+    class TreeNode
+    {
+        Event event;
+        TreeNode left, right;
+        boolean leftThread, rightThread;
+
+        public TreeNode(Event event)
+        {
+            this.event = event;
+            this.left = null;
+            this.right = null;
+            this.leftThread = true;
+            this.rightThread = true;
+        }
+    }
+
+    // ------------------ End of Other Classes needed for DTBST ------------------

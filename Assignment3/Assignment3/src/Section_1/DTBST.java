@@ -42,6 +42,7 @@ public class DTBST
             // nn.leftThread = false;   //?
             // nn.rightThread = false;  //?
             root = nn;
+            returnBool = true;
         }
         else
         {
@@ -69,8 +70,8 @@ public class DTBST
         else if (nodeToAdd.event.startTime < root.event.startTime)
         {
             TreeNode leftChild = root.left;
-            if (leftChild != null)                          // If left child is not null, keep checking
-                recursiveAddEvent(leftChild, nodeToAdd);
+            if (!root.leftThread && leftChild != null)                          // If left child is not null and root is not threaded, keep checking
+                return recursiveAddEvent(leftChild, nodeToAdd);
             else                                            // Otherwise, add the node here
             {
                 if (root.leftThread == true)                // Set left thread of nodeToAdd
@@ -91,11 +92,11 @@ public class DTBST
         else
         {
             TreeNode rightChild = root.right;
-            if (rightChild != null)                         // If right child is not null, keep checking
-                recursiveAddEvent(rightChild, nodeToAdd);
+            if (!root.rightThread && rightChild != null)                         // If right child is not null and root is not threaded, keep checking
+                return recursiveAddEvent(rightChild, nodeToAdd);
             else                                            // otherwise, add node here
             {
-                if (root.rightThread ==  true)              // set right thread of nodeToAdd
+                if (root.rightThread == true)              // set right thread of nodeToAdd
                 {
                     nodeToAdd.right = root.right;
                     nodeToAdd.rightThread = true;
@@ -108,9 +109,7 @@ public class DTBST
 
                 return true;                                // Node added successfully
             }
-        }
-        
-        return false;                                // Node not added successfully for whatever reason.
+        }        
     }
     
     /**
@@ -125,7 +124,7 @@ public class DTBST
         
         // if the eventToCheck's start time is > rootEvent's start time And 
         // eventToCheck's start time < rootEvent's end time, then we have a conflict
-        if (eventToCheck.startTime > rootEvent.startTime && eventToCheck.startTime < rootEndTime)
+        if (eventToCheck.startTime >= rootEvent.startTime && eventToCheck.startTime < rootEndTime)
             return true;
         
         // Otherwise there is no conflict.

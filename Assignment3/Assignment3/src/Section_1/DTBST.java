@@ -147,6 +147,19 @@ public class DTBST
     {
         if (checkEventDeleteByTime(root.event, time))   // If true, the event at 'root' is the event we are going to delete
         {
+            deleteEvent(root, time);
+            return true;
+        }
+        else if (time < root.event.startTime && !root.leftThread)
+            return recursiveDeleteEventByTime(root.left, time);
+        else if (time > root.event.startTime && !root.rightThread)
+            return recursiveDeleteEventByTime(root.right, time);
+
+        return false;
+    }
+
+    private void deleteEvent(TreeNode root, int time)
+    {
             // May put these cases into a sepatate method for deleteBy Name method.
             if (root.leftThread && root.leftThread)     // Case 1) deleting a leaf
             {
@@ -163,31 +176,68 @@ public class DTBST
             }
             else if (!root.leftThread && root.rightThread)  // Case 2.1) deleting a node with a left child (non threaded)
             {
-                TreeNode predecessor = getPredecessor(root);    // getting 'root's predecessor
-                predecessor.right = root.right;                 // set predecessor's right thread to 'root's right thread.
-                root.right.left = root.left;                    // set 'root's parent's left child as 'root's left child.
+                deleteEventCase2_1(root);
+                // TreeNode predecessor = getPredecessor(root);    // getting 'root's predecessor
+                // predecessor.right = root.right;                 // set predecessor's right thread to 'root's right thread.
+                // root.right.left = root.left;                    // set 'root's parent's left child as 'root's left child.
             }
             else if (!root.rightThread && root.leftThread)  // Case 2.2) deleting a node with a right child (non threaded)
             {
-                TreeNode successor = getSuccessor(root);        // getting 'root's successor
-                successor.left = root.left;                     // set successor's left thread to 'root's left thread.
-                root.left.right = root.right;                   // set 'root's parent's right child as 'root's right child.
+                deleteEventCase2_2(root);
+                // TreeNode successor = getSuccessor(root);        // getting 'root's successor
+                // successor.left = root.left;                     // set successor's left thread to 'root's left thread.
+                // root.left.right = root.right;                   // set 'root's parent's right child as 'root's right child.
             }
             else                                            // Case 3) deleting a node with 2 non-threaded children.
+            // Set 'root's Event value to it's right child's Event value, then delete 'root's right child.
             {
+                Event tmp = root.right.event;               // Store the Event value of 'root's right child
+                TreeNode childToRemove = root.right;
 
+                if (!childToRemove.leftThread && childToRemove.rightThread)     // Case 2.1) deleting a node with a left child (non threaded)
+                    deleteEventCase2_1(root.right);
+                
+                else                                                            // Case 2.2) deleting a node with a right child (non threaded)
+                    deleteEventCase2_1(root.left);
+                
+                root.event = tmp;
+
+                return;     // Return here or else 'root' will be set to null later (don't want that).
             }
 
             root = null;                                // delete root
+    }
 
-            return true;
-        }
-        else if (time < root.event.startTime && !root.leftThread)
-            return recursiveDeleteEventByTime(root.left, time);
-        else if (time > root.event.startTime && !root.rightThread)
-            return recursiveDeleteEventByTime(root.right, time);
+    /**
+     * Precondition: 
+     * - (!root.leftThread && root.rightThread) is true.
+     * 
+     * Case 2: Deleting a node with 1 non-threaded child.
+     * Case 2.1) deleting a node with a left child (non threaded).
+     * Case 2.2) deleting a node with a right child (non threaded).
+     * @param root a TreeNode, the node to be deleted.
+     */
+    private void deleteEventCase2_1(TreeNode root)
+    {
+        TreeNode predecessor = getPredecessor(root);    // getting 'root's predecessor
+        predecessor.right = root.right;                 // set predecessor's right thread to 'root's right thread.
+        root.right.left = root.left;                    // set 'root's parent's left child as 'root's left child.
+    }
 
-        return false;
+    /**
+     * Precondition: 
+     * - (!root.rightThread && root.leftThread) is true.
+     * 
+     * Case 2: Deleting a node with 1 non-threaded child.
+     * Case 2.1) deleting a node with a left child (non threaded).
+     * Case 2.2) deleting a node with a right child (non threaded).
+     * @param root a TreeNode, the node to be deleted.
+     */
+    private void deleteEventCase2_2(TreeNode root)
+    {
+        TreeNode successor = getSuccessor(root);        // getting 'root's successor
+        successor.left = root.left;                     // set successor's left thread to 'root's left thread.
+        root.left.right = root.right;                   // set 'root's parent's right child as 'root's right child.
     }
 
     /**

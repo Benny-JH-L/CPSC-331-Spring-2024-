@@ -19,7 +19,7 @@ public class Main
         System.out.printf("\nDoes Event<%s> added conflict when compared to Event<%s> | %s\n\n\n", e1.toString(), e0.toString(), c0);
 
         // addTest1();
-        addTest2();
+        test2();
     }
 
     /**
@@ -50,7 +50,7 @@ public class Main
      * Test cases are from:
      * https://www.youtube.com/watch?v=vkqdI9gNLww&ab_channel=Let%27sLearn 
      */
-    private static void addTest2()
+    private static void test2()
     {
         System.out.println("----Add Test 2---");
         DTBST bst = new DTBST();
@@ -88,7 +88,7 @@ public class Main
         b = bst.addEvent(e);
         System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
 
-        // Note these wont work once i make 'root' private in bst
+        // Note these wont work once i make 'root' private in DTBST
         System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
         System.out.println("Successor of root is: " + bst.getSuccessor(bst.root).event.toString());
     }

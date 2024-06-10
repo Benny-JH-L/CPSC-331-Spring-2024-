@@ -21,6 +21,8 @@ public class Main
         // addTest1();
         test2();
         test3();
+        test4();
+        test5();
     }
 
     /**
@@ -103,7 +105,7 @@ public class Main
 
     private static void test3()
     {
-        System.out.println("----Add Test 2---");
+        System.out.println("----Add Test 3---");
         DTBST bst = new DTBST();
 
         int duration = 1;
@@ -149,6 +151,109 @@ public class Main
 
         boolean deleted2 = bst.deleteEvent("n16");
         System.out.printf("Event at time %d was deleted (USing String name): %s\n\n", 16, deleted2);
+    }
+
+    private static void test4()
+    {
+        System.out.println("----Add Test 4---");
+        DTBST bst = new DTBST();
+
+        int duration = 1;
+        Event e = new Event("n200", 200, duration);
+        boolean b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n10", 100, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n30", 300, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n5",50, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n16", 160, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n14", 140, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n17", 170, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n13", 130, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        Event e1 = bst.findEventAtTime(170);        // expected result is n17
+        System.out.printf("FindEventAtTime(%d) = %s", 170, e1.toString());
+    }
+
+    private static void test5()
+    {
+        System.out.println("----Add Test 5---");
+        DTBST bst = new DTBST();
+
+        int duration = 1;
+        Event e = new Event("n200", 200, duration);
+        boolean b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n10", 10, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n30", 30, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n5",5, 4);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n16", 16, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n14", 14, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n17", 17, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n13", 13, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        Event e1 = bst.findEventAtTime(17);     // expected result is n16
+        System.out.printf("FindEventAtTime(%d) = %s", 17, e1.toString());
+
+        e1 = bst.findEventAtTime(16);           // expected result is n16
+        System.out.printf("\nFindEventAtTime(%d) = %s", 16, e1.toString());
+
+        e1 = bst.findEventAtTime(18);           // expected result is n17
+        System.out.printf("\nFindEventAtTime(%d) = %s", 18, e1.toString());
+
+        try
+        {
+            e1 = bst.findEventAtTime(19);           // expected result is null
+            System.out.printf("\nFindEventAtTime(%d) = %s", 19, e1.toString());
+        }
+        catch(Exception ex)
+        {
+            System.out.printf("\nFindEventAtTime(%d) = %s", 19, null);
+        }
+
+        e1 = bst.findEventAtTime(7);           // expected result is n5
+        System.out.printf("\nFindEventAtTime(%d) = %s", 7, e1.toString());
 
     }
 }

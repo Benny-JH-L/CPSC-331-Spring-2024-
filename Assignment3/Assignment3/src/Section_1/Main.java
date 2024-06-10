@@ -46,6 +46,10 @@ public class Main
         System.out.printf("Added Event<%s> | %s\n\n", e4.toString(), b4);
     }
 
+    /**
+     * Test cases are from:
+     * https://www.youtube.com/watch?v=vkqdI9gNLww&ab_channel=Let%27sLearn 
+     */
     private static void addTest2()
     {
         System.out.println("----Add Test 2---");
@@ -84,5 +88,8 @@ public class Main
         b = bst.addEvent(e);
         System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
 
+        // Note these wont work once i make 'root' private in bst
+        System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
+        System.out.println("Successor of root is: " + bst.getSuccessor(bst.root).event.toString());
     }
 }

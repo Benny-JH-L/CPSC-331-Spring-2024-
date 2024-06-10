@@ -49,7 +49,12 @@ public class DTBST
         return returnBool;
     }
 
-
+    /**
+     * Goes through DTBST recursively to determine where to add the 'nodeToAdd'.
+     * @param root a TreeNode, the root of the tree/sub-tree.
+     * @param nodeToAdd a TreeNode, the node to be added.
+     * @return a boolean. Return true if 'nodeToAdd' was added successfully, return false otherwise.
+     */
     protected boolean recursiveAddEvent(TreeNode root, TreeNode nodeToAdd)      // change to private
     {
         if (checkConflict(root.event, nodeToAdd.event))    
@@ -177,6 +182,11 @@ public class DTBST
         return false;
     }
 
+    /**
+     * Helper method for 'recursiveDeleteEventByTime(...)'.
+     * Delete's the 'root' and fixes threads and pointers to children (fixes tree in general after removal). 
+     * @param root a TreeNode, node to be deleted.
+     */
     private void deleteEvent(TreeNode root)
     {
             if (root.leftThread && root.rightThread)     // Case 1) Deleting a leaf node with 2 threaded children.
@@ -357,6 +367,12 @@ public class DTBST
     * - Returns false if no event with the given name was found.
     */
     public boolean deleteEvent(String eventName)
+    {
+        return recursiveDeleteEventByName(eventName);
+    }
+
+
+    private boolean recursiveDeleteEventByName(String eventName)
     {
 
     }

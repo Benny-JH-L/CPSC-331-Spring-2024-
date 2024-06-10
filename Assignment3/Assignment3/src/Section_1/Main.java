@@ -23,11 +23,54 @@ public class Main
         test3();
         test4();
         test5();
+        test6();
     }
 
     /**
      * My test cases, will be deleted before submition.
      */
+
+    private static DTBST createDefaultBST()
+    {
+        DTBST bst = new DTBST();
+
+        int duration = 1;
+
+        Event e = new Event("n20", 20, duration);
+        boolean b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
+
+        e = new Event("n10", 10, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
+
+        e = new Event("n30", 30, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
+
+        e = new Event("n5",5, 4);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
+
+        e = new Event("n16", 16, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
+
+        e = new Event("n14", 14, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
+
+        e = new Event("n17", 17, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
+
+        e = new Event("n13", 13, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
+
+        return bst;
+    }
+
     private static void addTest1()
     {
         System.out.println("\n----Add Test 1---");
@@ -197,11 +240,11 @@ public class Main
 
     private static void test5()
     {
-        System.out.println("\n\n----Add Test 5---");
+        System.out.println("\n\n----Add Test 5----");
         DTBST bst = new DTBST();
 
         int duration = 1;
-        Event e = new Event("n200", 200, duration);
+        Event e = new Event("n20", 20, duration);
         boolean b = bst.addEvent(e);
         System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
@@ -254,6 +297,33 @@ public class Main
 
         e1 = bst.findEventAtTime(7);           // expected result is n5
         System.out.printf("\nFindEventAtTime(%d) = %s", 7, e1.toString());
+    }
 
+    private static void test6()
+    {
+        System.out.println("\n\n----Test 6----");
+        DTBST bst = createDefaultBST();
+
+        int[] testCases = {0, 20, 9, 2, 7, 21, 31, 34, 16, 17};
+        // Note, for case 34, it should return a null event
+        // 0 should return 5
+        // 20 should return 
+        // 16 should return n17
+        // 17 should return 20
+
+        Event e;
+        
+        for (int integer : testCases)
+        {
+            try 
+            {
+                e = bst.findEventAtTime(integer);
+                System.out.printf("\nfindNextEvent(%d) = Event<%s>", integer, e.toString());
+            } 
+            catch (Exception ex) 
+            {
+                System.out.printf("\nfindNextEvent(%d) = Event<%s>", integer, null);
+            }
+        }
     }
 }

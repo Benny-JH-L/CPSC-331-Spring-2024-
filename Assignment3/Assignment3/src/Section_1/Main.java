@@ -20,7 +20,7 @@ public class Main
 
         // addTest1();
         test2();
-        // test3();
+        test3();
     }
 
     /**
@@ -143,6 +143,12 @@ public class Main
         System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
         System.out.println("Successor of root is: " + bst.getSuccessor(bst.root).event.toString());
 
-        bst.deleteEvent(16);    // deleting a node with 2 children 
+        // 30 should be the root of the 'bst' with right child null.
+        boolean deleted1 = bst.deleteEvent("n20"); // (Testing String inupt for delete) delete root, testing case 3.
+        System.out.printf("\nEvent at time %d was deleted (Using String name): %s\n", 20, deleted1);
+
+        boolean deleted2 = bst.deleteEvent("n16");
+        System.out.printf("Event at time %d was deleted (USing String name): %s\n\n", 16, deleted2);
+
     }
 }

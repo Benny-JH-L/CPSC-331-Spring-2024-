@@ -9,7 +9,7 @@ import java.util.List;
 public class DTBST 
 {
 
-    private TreeNode root = null;
+    public TreeNode root = null;    // change back to private!
 
     public DTBST()
     {
@@ -35,26 +35,17 @@ public class DTBST
     {
         boolean returnBool = false;
         TreeNode nn = new TreeNode(event);
-        nn.leftThread = false;   //?
-        nn.rightThread = false;  //?
-        if (root == null)
+        nn.leftThread = false;              // Set threads to false initially.
+        nn.rightThread = false;     
+
+        if (root == null)                   // If tree is null, start the tree with this node
         {
-            // nn.leftThread = false;   //?
-            // nn.rightThread = false;  //?
             root = nn;
             returnBool = true;
         }
         else
-        {
             returnBool = recursiveAddEvent(root, nn);
-            // BAD---
-            // if (event.startTime < root.event.startTime)
-            //     returnBool = recursiveAddEvent(event, root, root.left);
-            // else if (event.startTime > root.event.startTime)
-            //     returnBool = recursiveAddEvent(event, root, root.right);
-            // else // If the event to be added has a startTime that's the same as the root's startTime --> conflit.
-            //     System.out.println("Conflict");
-        }
+        
         return returnBool;
     }
 
@@ -70,6 +61,7 @@ public class DTBST
         else if (nodeToAdd.event.startTime < root.event.startTime)
         {
             TreeNode leftChild = root.left;
+
             if (!root.leftThread && leftChild != null)                          // If left child is not null and root is not threaded, keep checking
                 return recursiveAddEvent(leftChild, nodeToAdd);
             else                                            // Otherwise, add the node here
@@ -92,6 +84,7 @@ public class DTBST
         else
         {
             TreeNode rightChild = root.right;
+
             if (!root.rightThread && rightChild != null)                         // If right child is not null and root is not threaded, keep checking
                 return recursiveAddEvent(rightChild, nodeToAdd);
             else                                            // otherwise, add node here
@@ -147,7 +140,94 @@ public class DTBST
     */
     public boolean deleteEvent(int time)
     {
+        return recursiveDeleteEventByTime(root, time);
+    }
 
+    protected boolean recursiveDeleteEventByTime(TreeNode root, int time)
+    {
+        if (checkEventDeleteByTime(root.event, time))   // If true, the event at 'root' is the event we are going to delete
+        {
+            if (root.leftThread && root.leftThread)     // Case 1) deleting a leaf
+            {
+                if (root == root.right.left)            // delete left child (use .equals() ?)
+                {
+                    root.right.left = root.left;        // set 'root's parent's left child as 'root's left thread
+                    root.right.leftThread = true;
+                }
+                else                                    // delete right child
+                {
+                    root.left.right = root.right;       // set 'root's parent's right child as 'root's right thread
+                    root.left.rightThread = true;
+                }
+            }
+            else if (!root.leftThread && root.rightThread)  // Case 2.1) deleting a node with a left child (non threaded)
+            {
+                TreeNode predecessor = getPredecessor(root);
+            }
+            else if (!root.rightThread && root.leftThread)  // Case 2.2) deleting a node with a right child (non threaded)
+            {
+                TreeNode successor = getSuccessor(root);
+            }
+
+            root = null;                            // delete root
+
+            return true;
+        }
+        else if (time < root.event.startTime && !root.leftThread)
+            return recursiveDeleteEventByTime(root.left, time);
+        else if (time > root.event.startTime && !root.rightThread)
+            return recursiveDeleteEventByTime(root.right, time);
+
+        return false;
+    }
+
+    /**
+     * Gets the predecessor TreeNode of the 'root'.
+     * @param root a TreeNode.
+     * @return a TreeNode, the predecessor of the 'root'.
+     */
+    protected TreeNode getPredecessor(TreeNode root)    // change to private
+    {
+        TreeNode predecessor = root.left;       // Start at the left subtree
+
+        while(!predecessor.rightThread)
+            predecessor = predecessor.right;
+        
+        return predecessor;
+    }
+
+    /**
+     * Gets the successor TreeNode of the 'root'.
+     * @param root a TreeNode.
+     * @return a TreeNode, the successor of the 'root'.
+     */
+    protected TreeNode getSuccessor(TreeNode root)  // change to private
+    {
+        TreeNode successor = root.right;       // Start at the right subtree
+
+        while(!successor.leftThread)
+            successor = successor.left;
+        
+        return successor;
+    }
+
+    /**
+     * Checks if this event is the one we are looking for to delete. 
+     * That is if 'event's start time <= 'time' <= event's end time, 
+     * 'event' is the one we are looking for to delete, 
+     * return true, otherwise return false.
+     * @param eventToCheck an Event, to be checked.
+     * @param time an int. Time of event to be deleted.
+     * @return a boolean. Return true if this is the event to be deleted (That is between 'event' start time <= 'time' <= 'event's end time), return false otherwise.
+     */
+    protected boolean checkEventDeleteByTime(Event eventToCheck, int time)    // change to private
+    {
+        int eventEndTime = eventToCheck.startTime + eventToCheck.duration;
+
+        if (eventToCheck.startTime <= time && time <= eventEndTime)
+            return true;
+        
+        return false;
     }
 
     /**

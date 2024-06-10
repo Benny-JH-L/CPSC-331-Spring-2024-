@@ -55,7 +55,7 @@ public class DTBST
      * @param nodeToAdd a TreeNode, the node to be added.
      * @return a boolean. Return true if 'nodeToAdd' was added successfully, return false otherwise.
      */
-    protected boolean recursiveAddEvent(TreeNode root, TreeNode nodeToAdd)      // change to private
+    private boolean recursiveAddEvent(TreeNode root, TreeNode nodeToAdd)
     {
         if (checkConflict(root.event, nodeToAdd.event))    
         {
@@ -116,7 +116,7 @@ public class DTBST
      * @param eventToCheck an Event, the Event to be added.
      * @return a boolean. Returns true if 'eventToCheck' conflicts with 'rootEvent', otherwise returns false.
      */
-    protected boolean checkConflict(Event rootEvent, Event eventToCheck)    // change to private
+    private boolean checkConflict(Event rootEvent, Event eventToCheck)
     {
         int rootEndTime = rootEvent.startTime + rootEvent.duration;
         
@@ -335,7 +335,7 @@ public class DTBST
      * @param root a TreeNode.
      * @return a TreeNode, the predecessor of the 'root'.
      */
-    protected TreeNode getPredecessor(TreeNode root)    // change to private
+    private TreeNode getPredecessor(TreeNode root)
     {
         TreeNode predecessor = root.left;       // Start at the left subtree
 
@@ -350,7 +350,7 @@ public class DTBST
      * @param root a TreeNode.
      * @return a TreeNode, the successor of the 'root'.
      */
-    protected TreeNode getSuccessor(TreeNode root)  // change to private
+    private TreeNode getSuccessor(TreeNode root)
     {
         TreeNode successor = root.right;       // Start at the right subtree
 

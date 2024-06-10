@@ -12,11 +12,11 @@ public class Main
     {
         DTBST bst = new DTBST();
 
-        // Testing checkConflict() of events.
-        Event e0 = new Event("name0", 5000, 30);
-        Event e1 = new Event("name1", 120, 25);
-        boolean c0 = bst.checkConflict(e0, e1);  // expect to return true (conflict)
-        System.out.printf("\nDoes Event<%s> added conflict when compared to Event<%s> | %s\n\n\n", e1.toString(), e0.toString(), c0);
+        // Testing checkConflict() of events. (wont work when method is 'private')
+        // Event e0 = new Event("name0", 5000, 30);
+        // Event e1 = new Event("name1", 120, 25);
+        // boolean c0 = bst.checkConflict(e0, e1);  // expect to return true (conflict)
+        // System.out.printf("\nDoes Event<%s> added conflict when compared to Event<%s> | %s\n\n\n", e1.toString(), e0.toString(), c0);
 
         // addTest1();
         test2();
@@ -90,8 +90,8 @@ public class Main
         System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
 
         // Note these wont work once i make 'root' private in DTBST
-        System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
-        System.out.println("Successor of root is: " + bst.getSuccessor(bst.root).event.toString());
+        // System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
+        // System.out.println("Successor of root is: " + bst.getSuccessor(bst.root).event.toString());
 
         // 30 should be the root of the 'bst' with right child null.
         boolean deleted1 = bst.deleteEvent(20);    // delete root, testing case 3.
@@ -140,8 +140,8 @@ public class Main
         System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
 
         // Note these wont work once i make 'root' private in DTBST
-        System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
-        System.out.println("Successor of root is: " + bst.getSuccessor(bst.root).event.toString());
+        // System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
+        // System.out.println("Successor of root is: " + bst.getSuccessor(bst.root).event.toString());
 
         // 30 should be the root of the 'bst' with right child null.
         boolean deleted1 = bst.deleteEvent("n20"); // (Testing String inupt for delete) delete root, testing case 3.

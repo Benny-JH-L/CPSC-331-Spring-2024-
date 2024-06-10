@@ -20,6 +20,7 @@ public class Main
 
         // addTest1();
         test2();
+        // test3();
     }
 
     /**
@@ -47,8 +48,8 @@ public class Main
     }
 
     /**
-     * Test cases are from:
-     * https://www.youtube.com/watch?v=vkqdI9gNLww&ab_channel=Let%27sLearn 
+     * Test cases I created are for the tree:
+     * https://www.youtube.com/watch?v=vkqdI9gNLww&ab_channel=Let%27sLearn @7:01
      */
     private static void test2()
     {
@@ -91,5 +92,57 @@ public class Main
         // Note these wont work once i make 'root' private in DTBST
         System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
         System.out.println("Successor of root is: " + bst.getSuccessor(bst.root).event.toString());
+
+        // 30 should be the root of the 'bst' with right child null.
+        boolean deleted1 = bst.deleteEvent(20);    // delete root, testing case 3.
+        System.out.printf("\nEvent at time %d was deleted: %s\n", 20, deleted1);
+
+        boolean deleted2 = bst.deleteEvent(16);    // deleting a node with 2 children 
+        System.out.printf("Event at time %d was deleted: %s\n\n", 16, deleted2);
+    }
+
+    private static void test3()
+    {
+        System.out.println("----Add Test 2---");
+        DTBST bst = new DTBST();
+
+        int duration = 1;
+        Event e = new Event("n20", 20, duration);
+        boolean b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n10", 10, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n30", 30, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n5",5, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n16", 16, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n14", 14, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n17", 17, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        e = new Event("n13", 13, duration);
+        b = bst.addEvent(e);
+        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+
+        // Note these wont work once i make 'root' private in DTBST
+        System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
+        System.out.println("Successor of root is: " + bst.getSuccessor(bst.root).event.toString());
+
+        bst.deleteEvent(16);    // deleting a node with 2 children 
     }
 }

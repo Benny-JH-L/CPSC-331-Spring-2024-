@@ -30,7 +30,7 @@ public class Main
      */
     private static void addTest1()
     {
-        System.out.println("----Add Test 1---");
+        System.out.println("\n----Add Test 1---");
         DTBST bst = new DTBST();
         Event e0 = new Event("name0", 5000, 30);
         boolean b0 = bst.addEvent(e0);
@@ -55,41 +55,41 @@ public class Main
      */
     private static void test2()
     {
-        System.out.println("----Add Test 2---");
+        System.out.println("\n\n----Add Test 2---");
         DTBST bst = new DTBST();
 
         int duration = 1;
         Event e = new Event("n20", 20, duration);
         boolean b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n10", 10, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n30", 30, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n5",5, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n16", 16, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n14", 14, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n17", 17, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n13", 13, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         // Note these wont work once i make 'root' private in DTBST
         // System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
@@ -105,41 +105,41 @@ public class Main
 
     private static void test3()
     {
-        System.out.println("----Add Test 3---");
+        System.out.println("\n----Add Test 3---");
         DTBST bst = new DTBST();
 
         int duration = 1;
         Event e = new Event("n20", 20, duration);
         boolean b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n10", 10, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n30", 30, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n5",5, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n16", 16, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n14", 14, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n17", 17, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n13", 13, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         // Note these wont work once i make 'root' private in DTBST
         // System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
@@ -155,41 +155,41 @@ public class Main
 
     private static void test4()
     {
-        System.out.println("----Add Test 4---");
+        System.out.println("\n\n----Add Test 4---");
         DTBST bst = new DTBST();
 
         int duration = 1;
         Event e = new Event("n200", 200, duration);
         boolean b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n10", 100, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n30", 300, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n5",50, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n16", 160, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n14", 140, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n17", 170, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n13", 130, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         Event e1 = bst.findEventAtTime(170);        // expected result is n17
         System.out.printf("FindEventAtTime(%d) = %s", 170, e1.toString());
@@ -197,44 +197,44 @@ public class Main
 
     private static void test5()
     {
-        System.out.println("----Add Test 5---");
+        System.out.println("\n\n----Add Test 5---");
         DTBST bst = new DTBST();
 
         int duration = 1;
         Event e = new Event("n200", 200, duration);
         boolean b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n10", 10, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n30", 30, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n5",5, 4);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n16", 16, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n14", 14, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n17", 17, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         e = new Event("n13", 13, duration);
         b = bst.addEvent(e);
-        System.out.printf("Added Event<%s> | %s\n\n", e.toString(), b);
+        System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         Event e1 = bst.findEventAtTime(17);     // expected result is n16
-        System.out.printf("FindEventAtTime(%d) = %s", 17, e1.toString());
+        System.out.printf("\nFindEventAtTime(%d) = %s", 17, e1.toString());
 
         e1 = bst.findEventAtTime(16);           // expected result is n16
         System.out.printf("\nFindEventAtTime(%d) = %s", 16, e1.toString());

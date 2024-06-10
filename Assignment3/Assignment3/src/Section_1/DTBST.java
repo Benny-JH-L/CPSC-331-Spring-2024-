@@ -147,6 +147,7 @@ public class DTBST
     {
         if (checkEventDeleteByTime(root.event, time))   // If true, the event at 'root' is the event we are going to delete
         {
+            // May put these cases into a sepatate method for deleteBy Name method.
             if (root.leftThread && root.leftThread)     // Case 1) deleting a leaf
             {
                 if (root == root.right.left)            // delete left child (use .equals() ?)
@@ -162,14 +163,22 @@ public class DTBST
             }
             else if (!root.leftThread && root.rightThread)  // Case 2.1) deleting a node with a left child (non threaded)
             {
-                TreeNode predecessor = getPredecessor(root);
+                TreeNode predecessor = getPredecessor(root);    // getting 'root's predecessor
+                predecessor.right = root.right;                 // set predecessor's right thread to 'root's right thread.
+                root.right.left = root.left;                    // set 'root's parent's left child as 'root's left child.
             }
             else if (!root.rightThread && root.leftThread)  // Case 2.2) deleting a node with a right child (non threaded)
             {
-                TreeNode successor = getSuccessor(root);
+                TreeNode successor = getSuccessor(root);        // getting 'root's successor
+                successor.left = root.left;                     // set successor's left thread to 'root's left thread.
+                root.left.right = root.right;                   // set 'root's parent's right child as 'root's right child.
+            }
+            else                                            // Case 3) deleting a node with 2 non-threaded children.
+            {
+
             }
 
-            root = null;                            // delete root
+            root = null;                                // delete root
 
             return true;
         }

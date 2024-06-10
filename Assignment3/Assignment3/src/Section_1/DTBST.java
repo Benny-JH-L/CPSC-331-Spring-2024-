@@ -435,7 +435,32 @@ public class DTBST
     */
     public Event findEventAtTime(int time)
     {
+        return recursiveFindEventAtTime(root, time);
+    }
 
+    /**
+     * Recursively goes through DTBST and checks if 'root's event is occuring within 'time'. 
+     * @param root a TreeNode, node to check.
+     * @param time an int, the time of Event. 
+     * @return an Event. Returns an Event if it is occuring within 'time', otherwise returns null if no event at 'time' is occuring.
+     */
+    private Event recursiveFindEventAtTime(TreeNode root, int time)
+    {
+        int rootEventEndTime = root.event.startTime + root.event.duration;
+
+        // If the 'root's event start time <= 'time' <= event's end time, then this is the event occuring at 'time'
+        if (root.event.startTime <= time && time <= rootEventEndTime)
+            return root.event;      // return the Event
+        
+        // If 'time' < 'root' event's start time check left child (Non threaded).
+        else if (time < root.event.startTime && !root.leftThread)
+            return recursiveFindEventAtTime(root.left, time);
+        
+        // If 'time' > 'root' event's start time check left child (Non threaded).
+        else if (time > root.event.startTime && !root.rightThread)
+            return recursiveFindEventAtTime(root.right, time);
+        
+        return null;
     }
 
     /**

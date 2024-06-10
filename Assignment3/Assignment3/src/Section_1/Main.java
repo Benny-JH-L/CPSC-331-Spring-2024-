@@ -304,12 +304,20 @@ public class Main
         System.out.println("\n\n----Test 6----");
         DTBST bst = createDefaultBST();
 
-        int[] testCases = {0, 20, 9, 2, 7, 21, 31, 34, 16, 17};
+        int[] testCases = {0, 20, 8, 9, 2, 7, 21, 31, 34, 16, 18, 17};
         // Note, for case 34, it should return a null event
         // 0 should return 5
-        // 20 should return 
-        // 16 should return n17
-        // 17 should return 20
+        // 20 should return n20     
+        // 8 should return n10
+        // 9 should return n10
+        // 2 should return n5
+        // 7 should return n5
+        // 21 should return n30     // because n20's event ended at 21, so find after
+        // 31 should return null    // because n30 event ends at 31 and we want event start/happening/occuring 31.
+        // 34 should return null
+        // 16 should return n16
+        // 18 should return n20
+        // 17 should return n17
 
         Event e;
         
@@ -317,7 +325,7 @@ public class Main
         {
             try 
             {
-                e = bst.findEventAtTime(integer);
+                e = bst.findNextEvent(integer);
                 System.out.printf("\nfindNextEvent(%d) = Event<%s>", integer, e.toString());
             } 
             catch (Exception ex) 

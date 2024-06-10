@@ -1,4 +1,4 @@
-package Tutorial;
+package ADT;
 
 /**
  * List ADT operations

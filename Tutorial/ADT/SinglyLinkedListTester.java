@@ -1,4 +1,4 @@
-package Tutorial;
+package ADT;
 
 /**
  * A tester class for the SinglyLinkedList ADT

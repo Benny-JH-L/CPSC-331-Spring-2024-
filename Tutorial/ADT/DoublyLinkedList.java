@@ -1,9 +1,7 @@
-package Tutorial;
-
-import java.util.Random;
+package ADT;
 
 /**
- * Implementation of an unbounded sorted list ADT using single linking
+ * Implementation of an unbounded list ADT using double linking
  * 
  * Implementation is by contract and by reference
  *
@@ -11,40 +9,31 @@ import java.util.Random;
  */
 
 
-public class SortedSinglyLinkedList<T extends Comparable> implements ListInterface<T>
+public class DoublyLinkedList<T extends Comparable> implements ListInterface<T>
 {
-    private static class Node<T extends Comparable>
+    class Node<T extends Comparable>
     {
         private T value;
         private Node<T> next;
+        private Node<T> prev;
     }
 
     public static void main(String[] args) 
     {
-        Random rand = new Random();
-        SortedSinglyLinkedList<Integer> l1 = new SortedSinglyLinkedList<>();
-        SortedSinglyLinkedList<Integer> l2 = new SortedSinglyLinkedList<>();
-        
+        DoublyLinkedList list = new DoublyLinkedList<>();
         for (int i = 0; i < 9; i++)
-        {
-            int int_random = rand.nextInt(1000); 
-            l1.add(int_random);
-            int int_random2 = rand.nextInt(1000); 
-            l2.add(int_random2);
-        }
-        
-        l1.printList();
-        l2.printList();
-        merge(l1, l2);
+            list.add(i);
+        list.printList();    
+        // list.reverse();
     }
-    
+
     private Node<T> list, currentIndex;
     private int size;
 
     /**
-     * Constructor for objects of class SortedSinglyLinkedList
+     * Constructor for objects of class DoublyLinkedList
      */
-    public SortedSinglyLinkedList()
+    public DoublyLinkedList()
     {
         list = null;
         size = 0;
@@ -111,29 +100,20 @@ public class SortedSinglyLinkedList<T extends Comparable> implements ListInterfa
     
     /**
      * Precondition: None
-     * Postcondition: Adds a new element to the list
+     * Postcondition: Adds a new element at the begining of the list
      */
     public void add(T item) 
     {
         Node<T> newNode = new Node<T>();
         newNode.value = item;
-        
-        if (list == null) // adding to an empty list
+        if (list == null) list = newNode; //adding to an empty list
+        else 
         {
+            newNode.next = list;
+            list.prev = newNode;
             list = newNode;
-            size++;
-            return;
+            
         }
-    
-        Node<T> tmp = list, prev = null;
-        while (tmp != null && item.compareTo(tmp.value) > 0 )
-            {
-                prev = tmp;
-                tmp = tmp.next;
-            }
-        
-        prev.next = newNode;
-        newNode.next = tmp;
         size++;
     }
     
@@ -143,12 +123,12 @@ public class SortedSinglyLinkedList<T extends Comparable> implements ListInterfa
      */
     public int contains(T item) 
     {
-        int i = 0;
         Node<T> tmp = list;
-        while(tmp != null) 
-            {
-                if (item.compareTo(tmp.value) < 0) return -1;
-                if (item.compareTo(tmp.value) == 0) return i;
+        int i = 0;
+        while(tmp != null)
+            if (item.compareTo(tmp.value) == 0) return i;
+            else 
+            { 
                 tmp = tmp.next;
                 i++;
             }
@@ -157,27 +137,31 @@ public class SortedSinglyLinkedList<T extends Comparable> implements ListInterfa
     
     /**
      * Precondition: None
-     * Postcondition: removes an item from the list
+     * Postcondition: removes first occurence of an item from the list
      */
     public void remove(T item) 
     {
-        Node<T> tmp = list, prev = null;
-        if (tmp != null && item.compareTo(tmp.value) == 0) // removing the first item in the list
+        if (list == null) return; // list is empty
+        
+        if (list != null && item.compareTo(list.value) == 0) // removing the first item in the list
         {
             list = list.next;
+            if (list != null) list.prev = null; // list size is 2 or more
             size--;
             return;
         }
-        
+               
+        Node<T> tmp = list;
         while (tmp != null && item.compareTo(tmp.value) != 0) // search for item
-        {
-            prev = tmp;
             tmp = tmp.next;        
-        }
         
         if (tmp == null) return; // item not found
-        prev.next = tmp.next; // delete item
+             
+        // else tmp points to node to be removed; remove it
+        tmp.prev.next = tmp.next;
+        if (tmp.next != null) tmp.next.prev = tmp.prev; // node being removed is not the last node
         size--;
+    
     }
     
     /**
@@ -188,7 +172,47 @@ public class SortedSinglyLinkedList<T extends Comparable> implements ListInterfa
     {
        
     }
-    
+
+    /**
+     * Reverses the elements, in place. 
+     */
+    // public void reverse()
+    // {
+    //     Node<T> end = list;
+    //     for (int i = 0; i < size; i++)
+    //     {
+    //         if (end.next == null)
+    //             break;
+    //         end = end.next;
+    //     }
+    //     System.out.println("val at end: " + end.value);
+
+    //     for (int i = 0; i < size; i++)
+    //     {
+    //         Node<T> tmp = end.prev;
+    //         Node<T> tmp2 = end.next;
+    //         end.next = tmp;
+    //         end.prev = tmp2;
+    //         end = tmp;                
+    //     }
+    //     list = end;
+    //     printList();
+
+    //     // Node<T> tmp = list.next;
+    //     // list.next = null;
+    //     // list.prev = tmp;
+    //     // for (int i = 0; i < size-1; i++)
+    //     // {
+    //     //     Node<T> tmp2 = tmp;
+    //     //     tmp = tmp.next;
+    //     //     tmp2.next = tmp2.prev;
+    //     //     tmp2.prev = tmp;
+    //     //     printList();
+    //     // }
+    //     // list = tmp;
+    //     // printList();
+    // }
+
     /**
      * Precondition: None
      * Postcondition: prints the contents of the list
@@ -199,39 +223,9 @@ public class SortedSinglyLinkedList<T extends Comparable> implements ListInterfa
        Node<T> tmp = list;
        while (tmp!=null)
        {
-            System.out.print(tmp.value + ", ");
+            System.out.print(tmp.value + "-> ");
             tmp = tmp.next;
        }
        System.out.println("end-list");
-    }
-
-    public static void merge(SortedSinglyLinkedList l1, SortedSinglyLinkedList l2)
-    {
-        SortedSinglyLinkedList newList = new SortedSinglyLinkedList();
-        int size1 = l1.size;
-        int size2 = l2.size;
-        Node n1 = l1.list;
-        Node n2 = l2.list;
-        for (int i = 0; i < size1 && i < size2; i++)
-        {
-            if (n1.value.compareTo(n2.value) < 0)
-            {
-                newList.add(n1.value);
-                n1 = n1.next;
-            }
-            else if (n1.value.compareTo(n2.value) == 0)
-            {
-                newList.add(n1.value);
-                newList.add(n2.value);
-                n1 = n1.next;
-                n2 = n2.next;
-            }
-            else
-            {
-                newList.add(n2.value);
-                n2 = n2.next;
-            }
-        }
-        newList.printList();
     }
 }

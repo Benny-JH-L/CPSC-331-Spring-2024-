@@ -476,8 +476,57 @@ public class DTBST
     */
     public Event findNextEvent(int time)
     {
-
+        return recursiveFindNextEventByTime(root, time);
     }
+
+    /**
+     * Recursively goes through the DTBST and finds the next event after the specified 'time'.
+     * @param root a TreeNode, node to check.
+     * @param time an int, the specified time.
+     * @return an Event. Returns the first event that stats after the specified time, otherwise returns null.
+     */
+    private Event recursiveFindNextEventByTime(TreeNode root, int time)
+    {
+        int rootEventStart = root.event.startTime;
+
+        if (time < rootEventStart)
+        {
+            if (root.left == null)                  // Special case where 'root' is left-most node in the DTBST
+                return root.event;                  // and since 'time' < 'root' event time, we can't keep checking left, return 'root's event.
+            else if (!root.leftThread)                                  // If 'time' < 'root's event start time:
+                return recursiveFindNextEventByTime(root.left, time);       // 1) and root is not left threaded, check left child/sub-tree.
+            else if (root.leftThread)                                       // 2) and root is left threaded, time' is between 'root' and 'root.left', return 'root.event' as 'root' event start > 'root.left' event start,
+                return root.event;                                          // and ('root.left' event start < 'time' < 'root' event start).
+        }
+        else if (time > rootEventStart)
+        {
+            if (root.right == null)                 // Special case where 'root' is the right-most node in the DTBST     
+                return null;                        // since we are finding the first event that starts after 'time', there is no event that exists, return null.
+            else if (!root.rightThread)                                 // If 'time' > 'root's event start time:
+                return recursiveFindNextEventByTime(root.right, time);      // 1) and 'root' is not right threaded, check right child/sub-tree.
+            else if (root.rightThread)                                      // 2) and 'root' is right threaded, 'time' is between 'root' and 'root.right',
+                return root.right.event;                                    // return 'root.right.event'. As 'root' event start < 'time' < 'root.right' event start.
+        }
+        
+        // Otherwise, 'root's event start == 'time', return 'root's event.
+        return root.event;
+    }
+
+        // OLD
+        // // doesn't really work with null nodes (special cases of left-most node and roght-most node)
+        // if (time < rootEventStart && !root.leftThread)                  // If 'time' < 'root's event start time and root is not left threaded,
+        //     return recursiveFindNextEventByTime(root.left, time);       // check left child/sub-tree.
+        // else if (time < rootEventStart && root.leftThread)              // If 'time' < 'root's event start time and root is left threaded,
+        //     return root.event;                                          // 'time' is between 'root' and 'root.left', return 'root.event' as 'root' event start > 'root.left' event start 
+        //                                                                 // and ('root.left' event start < 'time' < 'root' event start).
+        
+        // else if (time > rootEventStart && !root.rightThread)            // If 'time' > 'root's event start time and 'root' is not right threaded,
+        //     return recursiveFindNextEventByTime(root.right, time);      // check right child/sub-tree.
+        // else if (time > rootEventStart && root.rightThread)             // If 'time' > 'root's event start time and 'root' is right threaded,
+        //     return root.right.event;                                    // 'time' is between 'root' and 'root.right', return 'root.right.event'.
+        
+        // else
+        //     return root.event;
 
     
     /**
@@ -544,6 +593,12 @@ public class DTBST
     * - Returns false if no conflict is found.
     */
     public boolean checkEventConflict(Event e)
+    {
+        return recursiveEventConflict(root, e);
+    }
+
+
+    private boolean recursiveEventConflict(TreeNode root, Event e)
     {
 
     }

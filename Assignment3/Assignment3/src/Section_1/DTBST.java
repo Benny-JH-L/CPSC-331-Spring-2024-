@@ -148,7 +148,13 @@ public class DTBST
         return recursiveDeleteEventByTime(root, time);
     }
 
-    protected boolean recursiveDeleteEventByTime(TreeNode root, int time)
+    /**
+     * Recursively goes through the DTBST and checks if 'root' has the Event occuring within 'time'.
+     * @param root a TreeNode, node to be checked.
+     * @param time an int, the time at which an Event is occuring within that needs to be deleted.
+     * @return a boolean. Returns true deleted an Event occuring wihtin 'time', otherwise return false.
+     */
+    private boolean recursiveDeleteEventByTime(TreeNode root, int time)
     {
         if (checkEventDeleteByTime(root.event, time))   // If true, the event at 'root' is the event we are going to delete
         {
@@ -183,7 +189,7 @@ public class DTBST
     }
 
     /**
-     * Helper method for 'recursiveDeleteEventByTime(...)'.
+     * Helper method for 'recursiveDeleteEventByTime(...)' and recursiveHelperDeleteEventByName(...).
      * Delete's the 'root' and fixes threads and pointers to children (fixes tree in general after removal). 
      * @param root a TreeNode, node to be deleted.
      */
@@ -368,13 +374,52 @@ public class DTBST
     */
     public boolean deleteEvent(String eventName)
     {
-        return recursiveDeleteEventByName(eventName);
+        return recursiveDeleteEventByName(root, eventName);
     }
 
-
-    private boolean recursiveDeleteEventByName(String eventName)
+    /**
+     * Recursively goes through the DTBST while checking if 'root' contains 'eventName'.
+     * @param root a TreeNode, node to be checked.
+     * @param eventName a String, name of the event to be deleted.
+     * @return a boolean. Return true if an Event with the name 'eventName' was found and deleted, 
+     * otherwise return false.
+     */
+    private boolean recursiveDeleteEventByName(TreeNode root, String eventName)
     {
+        boolean result = recursiveHelperDeleteEventByName(root, eventName); // check if 'root' contains 'eventName'
+        if (!result)    // if root does not contain 'eventName', keep searching.
+        {
+            boolean resultLeft = false;
+            boolean resultRight = false;
 
+            if (root.left != null && !root.leftThread)
+                resultLeft = recursiveDeleteEventByName(root.left, eventName);      // check 'root's left sub-tree (as long as child is not threaded).
+
+            if (root.right != null && !resultLeft && !root.rightThread)             // if 'eventName' was not found on the left sub-tree, check right sub-tree (as long as child is not threaded),
+                resultRight = recursiveDeleteEventByName(root.right, eventName);    // otherwise, 'eventName' was found on the left sub-tree don't check right sub-tree, and return true.
+            
+            // return the '||', or, of the 'resultLeft' with 'resultRight'. If one of these is true, we found the event. Otherwise 'eventName' was not found.
+            return (resultLeft || resultRight);
+        }
+        else            // Otherwise return true as we found and deleted the 'root' that contained an Event named 'eventName'.
+            return true;
+    }
+    
+    /**
+     * Helper method for 'recursiveDeleteEventByName(...)'.
+     * @param root a TreeNode, node to be checked.
+     * @param eventName a String, the event's name that needs to be deleted.
+     * @return a boolean. Returns true, if 'root' contains 'eventName' 
+     * ('root' is deleted from tree as well), otherwuise return false.
+     */
+    private boolean recursiveHelperDeleteEventByName(TreeNode root, String eventName)
+    {
+        if (root != null && root.event.name.equals(eventName))  // Checking if 'root's event is the one we are looking for
+        {
+            deleteEvent(root);                                  // delete 'root' containing the 'eventName'
+            return true;
+        }
+        return false;
     }
 
     /**

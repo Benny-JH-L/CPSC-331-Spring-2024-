@@ -487,30 +487,59 @@ public class DTBST
      */
     private Event recursiveFindNextEventByTime(TreeNode root, int time)
     {
+        Event nextEvent = null;
         int rootEventStart = root.event.startTime;
 
         if (time < rootEventStart)
         {
             if (root.left == null)                  // Special case where 'root' is left-most node in the DTBST
-                return root.event;                  // and since 'time' < 'root' event time, we can't keep checking left, return 'root's event.
+                nextEvent = root.event;             // and since 'time' < 'root' event time, we can't keep checking left, return 'root's event.
             else if (!root.leftThread)                                  // If 'time' < 'root's event start time:
                 return recursiveFindNextEventByTime(root.left, time);       // 1) and root is not left threaded, check left child/sub-tree.
             else if (root.leftThread)                                       // 2) and root is left threaded, time' is between 'root' and 'root.left', return 'root.event' as 'root' event start > 'root.left' event start,
-                return root.event;                                          // and ('root.left' event start < 'time' < 'root' event start).
+                nextEvent = root.event;                                     // and ('root.left' event start < 'time' < 'root' event start).
         }
-        else if (time > rootEventStart)
+        else if (time >= rootEventStart)
         {
             if (root.right == null)                 // Special case where 'root' is the right-most node in the DTBST     
                 return null;                        // since we are finding the first event that starts after 'time', there is no event that exists, return null.
-            else if (!root.rightThread)                                 // If 'time' > 'root's event start time:
+            else if (!root.rightThread)                                 // If 'time' >= 'root's event start time:
                 return recursiveFindNextEventByTime(root.right, time);      // 1) and 'root' is not right threaded, check right child/sub-tree.
             else if (root.rightThread)                                      // 2) and 'root' is right threaded, 'time' is between 'root' and 'root.right',
-                return root.right.event;                                    // return 'root.right.event'. As 'root' event start < 'time' < 'root.right' event start.
+                nextEvent = root.right.event;                               // return 'root.right.event'. As 'root' event start <= 'time' < 'root.right' event start.
         }
         
         // Otherwise, 'root's event start == 'time', return 'root's event.
-        return root.event;
+        return nextEvent;
     }
+
+    // OLD-------------
+    // private Event recursiveFindNextEventByTime(TreeNode root, int time)
+    // {
+    //     int rootEventStart = root.event.startTime;
+
+    //     if (time < rootEventStart)
+    //     {
+    //         if (root.left == null)                  // Special case where 'root' is left-most node in the DTBST
+    //             return root.event;                  // and since 'time' < 'root' event time, we can't keep checking left, return 'root's event.
+    //         else if (!root.leftThread)                                  // If 'time' < 'root's event start time:
+    //             return recursiveFindNextEventByTime(root.left, time);       // 1) and root is not left threaded, check left child/sub-tree.
+    //         else if (root.leftThread)                                       // 2) and root is left threaded, time' is between 'root' and 'root.left', return 'root.event' as 'root' event start > 'root.left' event start,
+    //             return root.event;                                          // and ('root.left' event start < 'time' < 'root' event start).
+    //     }
+    //     else if (time > rootEventStart)
+    //     {
+    //         if (root.right == null)                 // Special case where 'root' is the right-most node in the DTBST     
+    //             return null;                        // since we are finding the first event that starts after 'time', there is no event that exists, return null.
+    //         else if (!root.rightThread)                                 // If 'time' > 'root's event start time:
+    //             return recursiveFindNextEventByTime(root.right, time);      // 1) and 'root' is not right threaded, check right child/sub-tree.
+    //         else if (root.rightThread)                                      // 2) and 'root' is right threaded, 'time' is between 'root' and 'root.right',
+    //             return root.right.event;                                    // return 'root.right.event'. As 'root' event start < 'time' < 'root.right' event start.
+    //     }
+        
+    //     // Otherwise, 'root's event start == 'time', return 'root's event.
+    //     return root.event;
+    // }
 
         // OLD
         // // doesn't really work with null nodes (special cases of left-most node and roght-most node)
@@ -542,7 +571,68 @@ public class DTBST
     */
     public Event findNextEvent(String eventName)
     {
+        return recursiveFindNextEventByName(root, eventName);
+    }
 
+    /**
+     * Calls a recursive helper method to get result. Returns an Event if it exists, otherwise returns null.
+     * @param root a TreeNode, the actual root of the DTBST. (Start checking with this TreenNode)
+     * @param eventName a String, the name of the Event whose successor is being searched for. (Ie the event that starts after this one).
+     * @return an Event. Returns 'eventName's successor if it exists, otherwise return null.
+     */
+    private Event recursiveFindNextEventByName(TreeNode root, String eventName)
+    {
+        Object[] result = recursiveHelperFindNextEventByName(root, eventName);
+
+        if (result[0] != null)          // If result[0] is not null, next event was found.
+            return (Event)result[0];
+        
+        // Otherwise, return null as there is no such event found.
+        return null;
+    }
+
+    /**
+     * Recursively goes through the DTBST and checks if 'root' contains the Event with the name 'eventName'. 
+     * Then returns an Object[] of size 2, that contains an Event (index 0) and a boolean (index 1) of if the Event was found.
+     * @param root a TreeNode, node to check.
+     * @param eventName a String, the name of the Event being searched for.
+     * @return an Object[2] of size 2. Index 0 contains an Event object (or null if it does not exist), and index 1 contains a boolean of if we need to keep searching.
+     */
+    private Object[] recursiveHelperFindNextEventByName(TreeNode root, String eventName)
+    {
+        Object[] returnArr = {null, true};     // index 1 = Event, index 2 = boolean (Keep searching or not)
+
+        if (root != null && root.event.name.equals(eventName))  // Base cases
+        {
+            if (root.rightThread)
+                returnArr[0] = root.right.event;
+            else if (!root.rightThread && getSuccessor(root) != null)   // Case where 'root' is not right threaded so the next event is not its right child, but is their successor's event (As long as successor is not null).
+                returnArr[0] = getSuccessor(root).event;                // If the successor is null, there is no event after 'root', so return null for event (In default already).
+            else if (root.right == null)                // Case where 'root' is right-most node in the DTBST, so it contains the last event. No event after it, return null.
+                returnArr[0] = null;
+            
+            returnArr[1] = false;                       // found the event/found that it does not exist, stop searching.
+
+            return returnArr;
+        }
+        else if (root != null)      // As long as 'root' is not null, keep searching.
+        {
+            Object[] resultArrLeft = {null, true};
+            Object[] resultArrRight = {null, true};
+
+            if (root.left != null && !root.leftThread)                  // check left child/sub-tree, and ...
+                resultArrLeft = recursiveHelperFindNextEventByName(root.left, eventName);
+            
+            if ((boolean)resultArrLeft[1] && !root.rightThread)         // ... if event is not found on the left sub-tree, search the right sub-tree (as long as 'root's right node is not threaded)
+                resultArrRight = recursiveHelperFindNextEventByName(root.right, eventName);
+
+            if (!(boolean)resultArrLeft[1])                 // If 'resultArrLeft[1]' is false -> stop searching because event was found,
+                returnArr = resultArrLeft;                  // set return array to this.
+            else if (!(boolean)resultArrRight[1])           // If 'resultArrRight[1]' is false -> stop searching because event was found,
+                returnArr = resultArrRight;                 // set return array to this.
+        }
+        
+        return returnArr;                                   // Return array. Default return array of {null, true}. Event = null, 'keep searching' = true.
     }
 
     /**

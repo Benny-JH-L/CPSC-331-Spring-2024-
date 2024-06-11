@@ -18,11 +18,14 @@ public class Main
         // boolean c0 = bst.checkConflict(e0, e1);  // expect to return true (conflict)
         // System.out.printf("\nDoes Event<%s> added conflict when compared to Event<%s> | %s\n\n\n", e1.toString(), e0.toString(), c0);
 
+        // Should redo these tests...
         // addTest1();
         test2();
         test3();
         test4();
         test5();
+
+        // Good tests
         test6();
         test7();
         test8();
@@ -306,6 +309,8 @@ public class Main
      */
     private static void test6()
     {
+        // As of June 10 11:47pm 'findNextEvent(int time)' passed all tests.
+
         System.out.println("\n\n----Test 6 | findNextEvent(int time)----");
         DTBST bst = createDefaultBST();
 
@@ -387,6 +392,8 @@ public class Main
      */
     private static void test8()
     {
+        // As of June 10 11:47pm 'findNextEvent(int time)' passed all tests.
+
         System.out.println("\n\n----Test 8 | findNextEvent(int time) & findNextEvent(String eventName)----");
 
         String[] eventNames = {"n5", "n10", "n13", "n14", "n16", "n17", "n20", "n30", "n421"};

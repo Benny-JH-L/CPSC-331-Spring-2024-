@@ -24,6 +24,8 @@ public class Main
         test4();
         test5();
         test6();
+        test7();
+        test8();
     }
 
     /**
@@ -299,25 +301,15 @@ public class Main
         System.out.printf("\nFindEventAtTime(%d) = %s", 7, e1.toString());
     }
 
+    /**
+     * Tests 'findNextEvent(int time)' method
+     */
     private static void test6()
     {
-        System.out.println("\n\n----Test 6----");
+        System.out.println("\n\n----Test 6 | findNextEvent(int time)----");
         DTBST bst = createDefaultBST();
 
         int[] testCases = {0, 20, 8, 9, 2, 7, 21, 31, 34, 16, 18, 17};
-        // Note, for case 34, it should return a null event
-        // 0 should return 5
-        // 20 should return n20     
-        // 8 should return n10
-        // 9 should return n10
-        // 2 should return n5
-        // 7 should return n5
-        // 21 should return n30     // because n20's event ended at 21, so find after
-        // 31 should return null    // because n30 event ends at 31 and we want event start/happening/occuring 31.
-        // 34 should return null
-        // 16 should return n16
-        // 18 should return n20
-        // 17 should return n17
 
         Event e;
         
@@ -333,5 +325,91 @@ public class Main
                 System.out.printf("\nfindNextEvent(%d) = Event<%s>", integer, null);
             }
         }
+
+        // Expected Results:
+        /*
+        Note, for case 34, it should return a null event
+        0 should return 5
+        20 should return n30     
+        8 should return n10
+        9 should return n10
+        2 should return n5
+        7 should return n10
+        21 should return n30     // because n20's event ended at 21, so find after
+        31 should return null    // because n30 event ends at 31 and we want event start/happening/occuring 31.
+        34 should return null
+        16 should return n17
+        18 should return n20
+        17 should return n20
+        */
     }
+
+    /**
+     * Tests 'findNextEvent(String eventName)' method
+     */
+    private static void test7()
+    {
+        // As of June 10 11:05pm 'findNextEvent(String eventName)' passed all tests.
+        System.out.println("\n\n----Test 7 | findNextEvent(String eventName)----");
+        DTBST bst = createDefaultBST();
+
+        String[] testCases = {"n5", "n10", "n13", "n14", "n16", "n17", "n20", "n30", "n421"};
+
+        for (String cases : testCases)
+        {
+            Event event = bst.findNextEvent(cases);    
+
+            try 
+            {
+                System.out.printf("\nEvent after eventName<%s> is: Event<%s>", cases, event.toString());
+            } catch (Exception e)
+            {
+                System.out.printf("\nEvent after eventName<%s> is: Event<%s>", cases, event);
+            }
+        }
+
+        // Expected results:
+        /*
+        Event after eventName<n5> is: Event<n10 starts at 10 for 1 minutes.>
+        Event after eventName<n10> is: Event<n13 starts at 13 for 1 minutes.>
+        Event after eventName<n13> is: Event<n14 starts at 14 for 1 minutes.>
+        Event after eventName<n14> is: Event<n16 starts at 16 for 1 minutes.>
+        Event after eventName<n16> is: Event<n17 starts at 17 for 1 minutes.>
+        Event after eventName<n17> is: Event<n20 starts at 20 for 1 minutes.>
+        Event after eventName<n20> is: Event<n30 starts at 30 for 1 minutes.>
+        Event after eventName<n30> is: Event<null>
+        Event after eventName<n421> is: Event<null>
+        */
+    }
+
+    /**
+     * Test both 'findNextEvent(int time)' and 'findNextEvent(String eventName)' methods and compares their results.
+     */
+    private static void test8()
+    {
+        System.out.println("\n\n----Test 8 | findNextEvent(int time) & findNextEvent(String eventName)----");
+
+        String[] eventNames = {"n5", "n10", "n13", "n14", "n16", "n17", "n20", "n30", "n421"};
+        int[] times =         {6, 10, 13, 14, 16, 18, 20, 31, 421};
+        DTBST bst = createDefaultBST();
+
+        System.out.printf("\nfindNextEvent(int time)\t\t\t\t|\tfindNextEvent(String eventName)\t\t\t|\tSame Result");
+        for (int i = 0; i < eventNames.length; i++)
+        {
+            Event nextEventByTime, nextEventByName;
+
+            nextEventByTime = bst.findNextEvent(times[i]);
+            nextEventByName = bst.findNextEvent(eventNames[i]);
+
+            boolean sameResult = true;
+            if (nextEventByTime != null && nextEventByName != null)
+                sameResult = (nextEventByTime.toString().equals(nextEventByName.toString()));
+            else if ((nextEventByTime != null && nextEventByName == null) || (nextEventByTime == null && nextEventByName != null))
+                sameResult = false;
+            System.out.printf("\nTime<%s> = <%s>\t|\tName<%s> = %s\t|\t%s", times[i], nextEventByTime, eventNames[i], nextEventByName, sameResult);
+
+        }
+    }
+
+
 }

@@ -31,6 +31,7 @@ public class Main
         test8();
         test9();
         test10();
+        test11();
 
         // bst = createDefaultBST();
         // bst.findPreviousEvent(22);
@@ -472,8 +473,10 @@ public class Main
         for (int test : testCases)
         {
             Event e = bst.findPreviousEvent(test);
-            System.out.printf("\nPrevious event at time<%d> is Event<%s>", test, e);
+            System.out.printf("\nPrevious event at time<%d> is: Event<%s>", test, e);
         }
+
+        // FAILS SOME CASES!! Recode it and use 'findPreviousEvent(String eventName)' as template?
 
         // Expected Results:
         /* 
@@ -486,6 +489,42 @@ public class Main
         Previous event at time<20> is Event<n17 starts at 17 for 1 minutes.>
         Previous event at time<30> is Event<n20 starts at 20 for 1 minutes.>
         Previous event at time<34> is Event<n30 starts at 30 for 1 minutes.>
+        */
+    }
+
+    /**
+     * Tests 'findPreviousEvent(String eventName)'
+     */
+    private static void test11()
+    {
+        // As of June 12 1:34am 'findPreviousEvent(String eventName)' passed all tests.
+
+        System.out.println("\n\n----Test 11 | findPreviousEvent(String eventName)----");
+
+        DTBST bst = createDefaultBST();
+        bst.addEvent(new Event("n40", 40, 10));
+        bst.addEvent(new Event("n33", 33, 2));
+
+        String[] testCases = {"n5", "n10", "n13", "n14", "n16", "n17", "n20", "n30", "n33", "n40"};
+
+        for (String test : testCases)
+        {
+            Event event = bst.findPreviousEvent(test);
+            System.out.printf("\nPrevious event at EventName<%s> is: Event<%s>", test, event);
+        }
+
+        // Expected results:
+        /*
+        Previous event at EventName<n5> is: Event<null>
+        Previous event at EventName<n10> is: Event<n5 starts at 5 for 4 minutes.>
+        Previous event at EventName<n13> is: Event<n10 starts at 10 for 1 minutes.>
+        Previous event at EventName<n14> is: Event<n13 starts at 13 for 1 minutes.>
+        Previous event at EventName<n16> is: Event<n14 starts at 14 for 1 minutes.>
+        Previous event at EventName<n17> is: Event<n16 starts at 16 for 1 minutes.>
+        Previous event at EventName<n20> is: Event<n17 starts at 17 for 1 minutes.>
+        Previous event at EventName<n30> is: Event<n20 starts at 20 for 1 minutes.>
+        Previous event at EventName<n33> is: Event<n30 starts at 30 for 1 minutes.>
+        Previous event at EventName<n40> is: Event<n33 starts at 33 for 2 minutes.>
         */
     }
 }

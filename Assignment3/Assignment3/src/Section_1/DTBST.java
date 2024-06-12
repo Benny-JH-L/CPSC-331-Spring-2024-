@@ -331,6 +331,9 @@ public class DTBST
     // }
 
     /**
+     * Precondition:
+     * - root.left is not threaded (ie !root.leftThread == true)
+     * 
      * Gets the predecessor TreeNode of the 'root'.
      * @param root a TreeNode.
      * @return a TreeNode, the predecessor of the 'root'.
@@ -346,6 +349,9 @@ public class DTBST
     }
 
     /**
+     * Precondition:
+     * - root.right is not threaded (ie !root.rightThread == true)
+     * 
      * Gets the successor TreeNode of the 'root'.
      * @param root a TreeNode.
      * @return a TreeNode, the successor of the 'root'.
@@ -808,6 +814,8 @@ public class DTBST
     // Otherwise, 'root's event start == 'time', return 'root's event.
     // return nextEvent;
 
+
+
     /**
     * Returns the event that occurred immediately before the event with the specified
     name. Returns null if no such event is found.
@@ -822,7 +830,40 @@ public class DTBST
     */
     public Event findPreviousEvent(String eventName) 
     {
-    // Implement this method
+        return recursiveFindPreviousEventByName(root, eventName);
+    }
+
+    /**
+     * Recursively goes through the DTBST and checks/searches for the TreeNode that contains the event with the name 'eventName'.
+     * If it finds this node, returns the event immediately before this node.
+     * @param root a TreeNode, the node to be checked.
+     * @param eventName a String, the name of the event whose immediate event is being searched for.
+     * @return an Event. Returns the Event that immediately occured before 'eventName', otherwise returns null. 
+     */
+    private Event recursiveFindPreviousEventByName(TreeNode root, String eventName)
+    {
+        if (!root.event.name.equals(eventName))
+        {
+            Event event = null;
+
+            if (root.left != null && !root.leftThread)
+                event = recursiveFindPreviousEventByName(root.left, eventName);   // keep checking from left child.
+
+            if (event != null)                      // found the event we were looking for from the left child,
+                return event;                       // return it.
+            else if (root.right != null && !root.rightThread)   // otherwise keep checking from right child, if 'event' from left child results in null. (And 'root's right child is not null or threaded)
+                return recursiveFindPreviousEventByName(root.right, eventName);
+
+            return null;                            // Otherwise return null.
+        }
+
+        // Otherwise, 'root's event name matches 'eventName', return:
+        if (!root.leftThread && root.left != null)  // As long as 'root' is not left threaded or null,
+            return getPredecessor(root).event;      // return the previous event (will be its predecessor).
+        else if (root.left == null)             // Special case, where 'root' is left most node in DTBST, so it wont have a previous immediate event, return null.
+            return null;
+        else                                    // Otherwise,
+            return root.left.event;             // return 'root's left node's event as it wil be the event immediately before 'root's event. (For cases where 'root' is left threaded thus it won't have a predecessor)
     }
 
     /**

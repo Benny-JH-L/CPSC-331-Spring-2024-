@@ -29,6 +29,7 @@ public class Main
         test6();
         test7();
         test8();
+        test9();
     }
 
     /**
@@ -388,7 +389,7 @@ public class Main
     }
 
     /**
-     * Test both 'findNextEvent(int time)' and 'findNextEvent(String eventName)' methods and compares their results.
+     * Tests both 'findNextEvent(int time)' and 'findNextEvent(String eventName)' methods and compares their results.
      */
     private static void test8()
     {
@@ -418,5 +419,36 @@ public class Main
         }
     }
 
+    /**
+     * Tests 'checkEventConflict(Event e)'
+     */
+    private static void test9()
+    {
+        // As of June 11 9:37 pm 'checkEventConflict(Event e)' passed all tests.
+        System.out.println("\n\n----Test 9 | checkEventConflict(Event e)----");
+
+                                                                    // Expected results:
+        Event e1 = new Event("e1", 20, 1);  // conflict     (true)
+        Event e2 = new Event("e2", 21, 1);  // no conflict  (false)
+        Event e3 = new Event("e3", 7, 2);   // conflict     (true)
+        Event e4 = new Event("e4", 18, 2);  // no conflict  (false)
+        Event e5 = new Event("e5", 9, 1);   // no conflict  (false)
+        Event e6 = new Event("e6", 31, 5);  // no conflict  (false)
+        Event e7 = new Event("e7", 6, 100); // conflict     (true)
+        Event e8 = new Event("e8", 8, 23);  // conflict     (true)
+        Event e9 = new Event("e9", 16, 120);  // conflict     (true)
+        Event e10 = new Event("e10", 13, 200);  // conflict     (true)
+
+        DTBST bst = createDefaultBST();
+
+        Event[] events = {e1, e2, e3, e4, e5, e6, e7, e8, e9, e10};
+
+        for (Event event : events)
+        {
+            boolean isConflict = bst.checkEventConflict(event);
+
+            System.out.printf("\nEvent<%s> has conflict: %s", event, isConflict);
+        }
+    }
 
 }

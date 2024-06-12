@@ -122,7 +122,7 @@ public class DTBST
         
         // if the eventToCheck's start time is > rootEvent's start time And 
         // eventToCheck's start time < rootEvent's end time, then we have a conflict
-        if (eventToCheck.startTime >= rootEvent.startTime && eventToCheck.startTime < rootEndTime)
+        if (eventToCheck.startTime >= rootEvent.startTime && eventToCheck.startTime < rootEndTime)  // if 'eventToCheck' starts when 'rootEvent' ends it is not considered a conflict.
             return true;
         
         // Otherwise there is no conflict.
@@ -158,7 +158,7 @@ public class DTBST
     {
         if (checkEventDeleteByTime(root.event, time))   // If true, the event at 'root' is the event we are going to delete
         {
-            deleteEvent(root);
+            deleteEventHelper(root);
             return true;
         }
         else if (time < root.event.startTime && !root.leftThread)
@@ -193,7 +193,7 @@ public class DTBST
      * Delete's the 'root' and fixes threads and pointers to children (fixes tree in general after removal). 
      * @param root a TreeNode, node to be deleted.
      */
-    private void deleteEvent(TreeNode root)
+    private void deleteEventHelper(TreeNode root)
     {
             if (root.leftThread && root.rightThread)     // Case 1) Deleting a leaf node with 2 threaded children.
             {
@@ -245,7 +245,7 @@ public class DTBST
                 Event tmp = root.right.event;               // Store the Event value of 'root's right child
                 TreeNode childToRemove = root.right;
 
-                deleteEvent(childToRemove);
+                deleteEventHelper(childToRemove);
                 // if (childToRemove.leftThread && childToRemove.rightThread)          // Case 1) Deleting a leaf node with 2 threaded children
                 //     deleteEventCase1(childToRemove);
                 // else if (!childToRemove.leftThread && childToRemove.rightThread)    // Case 2.1) deleting a node with a left child (non threaded)
@@ -416,7 +416,7 @@ public class DTBST
     {
         if (root != null && root.event.name.equals(eventName))  // Checking if 'root's event is the one we are looking for
         {
-            deleteEvent(root);                                  // delete 'root' containing the 'eventName'
+            deleteEventHelper(root);                            // delete 'root' containing the 'eventName'
             return true;
         }
         return false;
@@ -649,7 +649,7 @@ public class DTBST
     */
     public Event findPreviousEvent(int time)
     {
-
+        // going to be very similar to 'findNextEvent(...) methods' just instead of looking right we are looking left :)
     }
 
     /**
@@ -688,9 +688,30 @@ public class DTBST
     }
 
 
+    /**
+     * Recursively goes through the DTBST and compares the Event in 'root' with Event 'e' 
+     * and sees if there is a conflict. If 'e' conflicts with the Event in 'root' returns true, otherwise returns false.
+     * @param root a TreeNode, node to check.
+     * @param e an Event. 
+     * @return a boolean. Returns true if Event 'e' conflicts with an Event in the DTBST.
+     */
     private boolean recursiveEventConflict(TreeNode root, Event e)
     {
+        boolean isConflict = checkConflict(root.event, e);
+        boolean leftFoundConflict = false, rightFoundConflict = false;
 
+        if (isConflict)     // If a conflict is found,
+            return true;    // return true;
+        
+        // Check left sub-tree/child (As long as it exists and is not left threaded)
+        if (root.left != null && !root.leftThread)
+            leftFoundConflict = recursiveEventConflict(root.left, e);
+        
+        // Check right sub-tree/child (If we didn't find conflict on the left sub-tree/child, and right is not null or threaded)
+        if (!leftFoundConflict && root.right != null && !root.rightThread)
+            rightFoundConflict = recursiveEventConflict(root.right, e);
+
+        return (leftFoundConflict || rightFoundConflict);               // Return the 'or' of the two booleans. If one is true, a conflict was found somewhere in the tree.
     }
 
     /**

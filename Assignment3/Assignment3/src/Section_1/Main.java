@@ -474,5 +474,18 @@ public class Main
             Event e = bst.findPreviousEvent(test);
             System.out.printf("\nPrevious event at time<%d> is Event<%s>", test, e);
         }
+
+        // Expected Results:
+        /* 
+        Previous event at time<5> is Event<null>
+        Previous event at time<10> is Event<n5 starts at 5 for 4 minutes.>
+        Previous event at time<13> is Event<n10 starts at 10 for 1 minutes.>
+        Previous event at time<14> is Event<n13 starts at 13 for 1 minutes.>
+        Previous event at time<16> is Event<n14 starts at 14 for 1 minutes.>
+        Previous event at time<17> is Event<n16 starts at 16 for 1 minutes.>
+        Previous event at time<20> is Event<n17 starts at 17 for 1 minutes.>
+        Previous event at time<30> is Event<n20 starts at 20 for 1 minutes.>
+        Previous event at time<34> is Event<n30 starts at 30 for 1 minutes.>
+        */
     }
 }

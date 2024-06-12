@@ -20,16 +20,20 @@ public class Main
 
         // Should redo these tests...
         // addTest1();
-        test2();
-        test3();
-        test4();
-        test5();
+        // test2();
+        // test3();
+        // test4();
+        // test5();
 
         // Good tests
         test6();
         test7();
         test8();
         test9();
+        test10();
+
+        // bst = createDefaultBST();
+        // bst.findPreviousEvent(22);
     }
 
     /**
@@ -451,4 +455,24 @@ public class Main
         }
     }
 
+    /**
+     * Tests 'findPreviousEvent(int time)'
+     */
+    private static void test10()
+    {
+        System.out.println("\n\n----Test 10 | findPreviousEvent(int time)----");
+
+        DTBST bst = createDefaultBST();
+        bst.addEvent(new Event("n40", 40, 10));
+        bst.addEvent(new Event("n33", 33, 2));
+        bst.addEvent(new Event("n60", 60, 1));
+
+        int[] testCases = {34, 5, 10, 13, 14, 16, 17, 20, 30};
+
+        for (int test : testCases)
+        {
+            Event e = bst.findPreviousEvent(test);
+            System.out.printf("\nPrevious event at time<%d> is Event<%s>", test, e);
+        }
+    }
 }

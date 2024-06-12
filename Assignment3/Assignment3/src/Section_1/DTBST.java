@@ -661,6 +661,7 @@ public class DTBST
 
     private Event recursiveFindPreviousEventByTime(TreeNode root, int time)   // change to private
     {
+        no working :(
         if (time <= root.event.startTime)   // If 'time' <= 'root' event's start, means 'root's event hasn't started relative to 'time'.
         {
             if (root.leftThread)            // Base case, if 'root' is left threaded, we have reached a leaf node, return 'root.left.event',

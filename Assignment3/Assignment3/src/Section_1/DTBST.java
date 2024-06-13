@@ -656,9 +656,15 @@ public class DTBST
     public Event findPreviousEvent(int time)
     {
         return recursiveFindPreviousEventByTime(root, time);
-        // going to be very similar to 'findNextEvent(...) methods' just instead of looking right we are looking left :)
     }
 
+    /**
+     * Recursively goes through the DTBST and compares the 'root's event's ending time with 'time'. And finds the event 
+     * that occured (started and finished) immediately before 'time'. 
+     * @param root a TreeNode, node's event to be checked.
+     * @param time an int. Used to find the event immediately before 'time'.
+     * @return an Event. The event that occursed (started and finished) immediately before 'time'. Otherwise, returns null.
+     */
     private Event recursiveFindPreviousEventByTime(TreeNode root, int time)
     {
         int eventEndTime = root.event.startTime + root.event.duration;
@@ -684,7 +690,6 @@ public class DTBST
         
         // Otherwise, 'time' == 'eventEndTime', so 'root's event will be the most immediate previous event relative to 'time'.
         return root.event;      // return 'root's event.
-        
     }
 
     // See OneNote for better visualization and explaination for cases. The following I did very late while very tired...
@@ -792,6 +797,7 @@ public class DTBST
 
 
 
+    // Prolly not needed
     /**
      * Precondition:
      * - 'event' is not null.
@@ -817,6 +823,7 @@ public class DTBST
         return false;           // otherwise return false
     }
 
+    // OLD
     // Event nextEvent = null;
     // int rootEventStart = root.event.startTime;
 

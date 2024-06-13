@@ -659,38 +659,35 @@ public class DTBST
         // going to be very similar to 'findNextEvent(...) methods' just instead of looking right we are looking left :)
     }
 
-    private Event recursiveFindPreviousEventByTime(TreeNode root, int time)   // change to private
+    private Event recursiveFindPreviousEventByTime(TreeNode root, int time)
     {
-        no working :(
-        if (time <= root.event.startTime)   // If 'time' <= 'root' event's start, means 'root's event hasn't started relative to 'time'.
+        int eventEndTime = root.event.startTime + root.event.duration;
+
+        if (time < eventEndTime)        // Searching left, as 'root's event has not yet ended relative to 'time'
         {
-            if (root.leftThread)            // Base case, if 'root' is left threaded, we have reached a leaf node, return 'root.left.event',
-                return root.left.event;     // as this will be the immediate event before 'time'.
-            else if (root.left == null)     // Base case, traversed to the left most node in the DTBST which is also the event that 'occures first' (smallest value for start time).
-                return null;                // There is no event previous of this and 'time' is still <= 'root's event start time, so return null.
-            else
-                return recursiveFindPreviousEventByTime(root.left, time);   // Otherwise, keep checking from left.
-        }
-        else                                // Otherwise 'time' > 'root' event's start time, means 'root's event has started relative to 'time'.
-        {
-            if (root.rightThread)           // Base case, if 'root' is right threaded, and 'time' > 'root' event start time, we return 'root's event as the event to the right will 
-                return root.event;                                     // be it's parent who we already checked (and went here), and to the left will not be the most immediate event that started and finished relative to 'time'.
-            // Base case, if 'root' is the right most node in the DTBST and 'root's event started and finished relative to 'time', return 'root's event as it is the immediate event before 'time'.    
-            else if (hasEventStartedAndFinishedAtTime(root.event, time) && root.right == null)
-                return root.event;
-            // Base case, if 'root' is the right most node in the DTBST and 'root's event has not started and finished relative to 'time' and is left threaded, return it's left threaded nodes event.
-            else if (!hasEventStartedAndFinishedAtTime(root.event, time) && root.leftThread)
-                return root.left.event;
-            // Base case, if 'root' is the right most node in the DTBST and 'root's event has not started and finished, then check 'root's left child.
-            else if (!hasEventStartedAndFinishedAtTime(root.event, time) && !root.leftThread)
+            if (root.left == null)      // If 'root.left' is null its reached the left most node in the DTBST, 
+                return null;            // no more nodes to check and this node's event has not yet finished, return null.
+            else if (root.leftThread)   // If 'root' is left threaded and 'time' < 'root's event end time, then 'root's event has not ended yet,
+                return root.left.event; // so return 'root.left's event. (As this event will have ended right before 'root's event, thus being the immediate event before 'time').
+            else                        // Otherwise, keep searching from the left child.
                 return recursiveFindPreviousEventByTime(root.left, time);
-            // Otherwise keep checking from right.
-            else
-                return recursiveFindPreviousEventByTime(root.right, time);  // Keep checking
         }
-        // NOTE Does not work properly, look at test case with time 34.
+        else if (time > eventEndTime)   // Search right, as 'root's event has ended relative to 'time' but may not be the immediate event before 'time'
+        {
+            if (root.right == null)     // If 'root.right' is null we have reached the right most node in the DTBST, 
+                return root.event;      // so return this node's event.
+            else if (root.rightThread)  // If 'root' is right threaded, it will loop back to an event who'll have occured after 'root', 
+                return root.event;      // so return 'root's event. (As it will be the most immediate event).
+            else                        // Otherwise, keep searching from the right child.
+                return recursiveFindPreviousEventByTime(root.right, time);
+        }
+        
+        // Otherwise, 'time' == 'eventEndTime', so 'root's event will be the most immediate previous event relative to 'time'.
+        return root.event;      // return 'root's event.
+        
     }
 
+    // See OneNote for better visualization and explaination for cases. The following I did very late while very tired...
     // Using default tree:
     // If time was 25, need to find the event to the right, as '20' (root) started and finished relative to 25 but it might 
     // not be the immediate previous event at 25. Going to the right root = 30, we see that in this node this event hasn't 
@@ -763,6 +760,36 @@ public class DTBST
     //     else
     //         return recursiveFindPreviousEventByTime(root.right, time);  // Keep checking
     // }
+
+    // OLD 4
+        // if (time <= root.event.startTime)   // If 'time' <= 'root' event's start, means 'root's event hasn't started relative to 'time'.
+        // {
+        //     if (root.leftThread)            // Base case, if 'root' is left threaded, we have reached a leaf node, return 'root.left.event',
+        //         return root.left.event;     // as this will be the immediate event before 'time'.
+        //     else if (root.left == null)     // Base case, traversed to the left most node in the DTBST which is also the event that 'occures first' (smallest value for start time).
+        //         return null;                // There is no event previous of this and 'time' is still <= 'root's event start time, so return null.
+        //     else
+        //         return recursiveFindPreviousEventByTime(root.left, time);   // Otherwise, keep checking from left.
+        // }
+        // else                                // Otherwise 'time' > 'root' event's start time, means 'root's event has started relative to 'time'.
+        // {
+        //     if (root.rightThread)           // Base case, if 'root' is right threaded, and 'time' > 'root' event start time, we return 'root's event as the event to the right will 
+        //         return root.event;                                     // be it's parent who we already checked (and went here), and to the left will not be the most immediate event that started and finished relative to 'time'.
+        //     // Base case, if 'root' is the right most node in the DTBST and 'root's event started and finished relative to 'time', return 'root's event as it is the immediate event before 'time'.    
+        //     else if (hasEventStartedAndFinishedAtTime(root.event, time) && root.right == null)
+        //         return root.event;
+        //     // Base case, if 'root' is the right most node in the DTBST and 'root's event has not started and finished relative to 'time' and is left threaded, return it's left threaded nodes event.
+        //     else if (!hasEventStartedAndFinishedAtTime(root.event, time) && root.leftThread)
+        //         return root.left.event;
+        //     // Base case, if 'root' is the right most node in the DTBST and 'root's event has not started and finished, then check 'root's left child.
+        //     else if (!hasEventStartedAndFinishedAtTime(root.event, time) && !root.leftThread)
+        //         return recursiveFindPreviousEventByTime(root.left, time);
+        //     // Otherwise keep checking from right.
+        //     else
+        //         return recursiveFindPreviousEventByTime(root.right, time);  // Keep checking
+        // }
+        // // NOTE Does not work properly, look at test case with time 34.
+
 
 
     /**
@@ -956,6 +983,7 @@ public class DTBST
     private void collectEventsInRange(TreeNode node, int start, int end, List<Event> events) 
     {
     // Implement this method
+    implment this :)
     }
     
 }

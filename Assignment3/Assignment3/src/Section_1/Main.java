@@ -461,6 +461,8 @@ public class Main
      */
     private static void test10()
     {
+        // As of June 12 6:30pm 'findPreviousEvent(int time)' passed all tests.
+
         System.out.println("\n\n----Test 10 | findPreviousEvent(int time)----");
 
         DTBST bst = createDefaultBST();
@@ -468,15 +470,13 @@ public class Main
         bst.addEvent(new Event("n33", 33, 2));
         bst.addEvent(new Event("n60", 60, 1));
 
-        int[] testCases = {34, 5, 10, 13, 14, 16, 17, 20, 30};
+        int[] testCases = {5, 10, 13, 14, 16, 17, 20, 30, 34};
 
         for (int test : testCases)
         {
             Event e = bst.findPreviousEvent(test);
             System.out.printf("\nPrevious event at time<%d> is: Event<%s>", test, e);
         }
-
-        // FAILS SOME CASES!! Recode it and use 'findPreviousEvent(String eventName)' as template?
 
         // Expected Results:
         /* 
@@ -527,4 +527,5 @@ public class Main
         Previous event at EventName<n40> is: Event<n33 starts at 33 for 2 minutes.>
         */
     }
+    
 }

@@ -34,7 +34,7 @@ public class Main
         // test9();
         // test10();
         // test11();
-        // test12();
+        test12();
 
         // bst = createDefaultBST();
         // bst.findPreviousEvent(22);
@@ -532,6 +532,7 @@ public class Main
      */
     private static void test12()
     {
+        // As of June 14 6:56pm 'getEventsInRange(int startTimeRange, int endTimeRange)' passed all tests.
 
         System.out.println("\n\n----Test 12 | getEventsInRange(int startTimeRange, int endTimeRange)----");
         DTBST bst = createDefaultBST(1);
@@ -579,7 +580,8 @@ public class Main
             System.out.printf("\nEvent<%s>,", event);
         
         // Expected result: -? still waiting on response for getNextEvent(int time) question
-        /* (All events starting between 8 and 20)
+        /* (All events starting between times 8 and 20)
+        Event<n5 starts at 5 for 4 minutes.>,
         Event<n10 starts at 10 for 1 minutes.>,
         Event<n13 starts at 13 for 1 minutes.>,
         Event<n14 starts at 14 for 1 minutes.>,
@@ -590,7 +592,7 @@ public class Main
 
         // Test 4 (edge case)
         list = bst.getEventsInRange(0, 8);
-        System.out.printf("\nGet Events In Range: [%d, %d]:", 0, 8);
+        System.out.printf("\n\nGet Events In Range: [%d, %d]:", 0, 8);
 
         for (Event event : list)
             System.out.printf("\nEvent<%s>,", event);
@@ -598,15 +600,57 @@ public class Main
         // Expected result:
         // Event<n5 starts at 5 for 4 minutes.>,
 
+
+        // Custom DTBST
+        bst = new DTBST();
+        bst.addEvent(new Event("n160-260", 160, 100));
+        bst.addEvent(new Event("n100-160", 100, 60));
+        bst.addEvent(new Event("n300-360", 300, 70));
+
         // Test 5
-        list = bst.getEventsInRange(19, 31);
-        System.out.printf("\nGet Events In Range: [%d, %d]:", 19, 30);
+        list = bst.getEventsInRange(240, 360);
+        System.out.printf("\nGet Events In Range (New DTBST 1): [%d, %d]:", 240, 360);
 
         for (Event event : list)
             System.out.printf("\nEvent<%s>,", event);
 
         // Expected result:
-        // Event<n20 starts at 20 for 1 minutes.>,
-        // Event<n30 starts at 30 for 1 minutes.>,
+        // Event<n160-260 starts at 160 for 100 minutes.>,
+        // Event<n300-370 starts at 300 for 70 minutes.>,
+
+        // Custom DTBST 2
+        bst = new DTBST();
+        bst.addEvent(new Event("n160-260", 160, 100));
+        bst.addEvent(new Event("n100-160", 100, 60));
+        bst.addEvent(new Event("n300-340", 300, 40));
+        bst.addEvent(new Event("n340-370", 340, 30));
+
+        // Test 6
+        list = bst.getEventsInRange(240, 360);
+        System.out.printf("\nGet Events In Range (New DTBST 2): [%d, %d]:", 240, 360);
+
+        for (Event event : list)
+            System.out.printf("\nEvent<%s>,", event);
+
+        // Expected result:
+        // Event<n160-260 starts at 160 for 100 minutes.>,
+        // Event<n300-340 starts at 300 for 40 minutes.>,
+        // Event<n340-370 starts at 340 for 30 minutes.>,
+
+        // Custom DTBST 3
+        bst = new DTBST();
+        bst.addEvent(new Event("n100-400", 100, 300));
+        bst.addEvent(new Event("n000-090", 0, 90));
+        bst.addEvent(new Event("n410-500", 410, 90));        
+
+        // Test 7
+        list = bst.getEventsInRange(240, 360);
+        System.out.printf("\nGet Events In Range (New DTBST 3): [%d, %d]:", 240, 360);
+
+        for (Event event : list)
+            System.out.printf("\nEvent<%s>,", event);
+        
+        // Expected result:
+        // Event<n100-400 starts at 100 for 300 minutes.>,
     }
 }

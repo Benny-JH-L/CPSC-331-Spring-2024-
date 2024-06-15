@@ -12,6 +12,7 @@ public class Main
 {
     public static void main(String[] args) throws Exception 
     {
+        test2_deleteEvent_int_time();
         assignmentTests();
     }
 
@@ -226,11 +227,16 @@ public class Main
         System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
 
         // 30 should be the root of the 'bst' with right child null.
+        // bst.deleteEvent(30);
         boolean deleted1 = bst.deleteEvent(20);    // delete root, testing case 3.
         System.out.printf("\nEvent at time %d was deleted: %s\n", 20, deleted1);
 
-        boolean deleted2 = bst.deleteEvent(16);    // deleting a node with 2 children 
-        System.out.printf("Event at time %d was deleted: %s\n\n", 16, deleted2);
+        // boolean deleted2 = bst.deleteEvent(16);    // deleting a node with 2 children 
+        // System.out.printf("Event at time %d was deleted: %s\n\n", 16, deleted2);
+
+        bst = new DTBST();
+        bst.addEvent(new Event("Root100-150", 100, 50));
+        bst.deleteEvent(120);
     }
 
     private static void test3()

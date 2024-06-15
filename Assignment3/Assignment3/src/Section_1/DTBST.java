@@ -233,7 +233,43 @@ public class DTBST
                 successor.left = root.left;                     // set successor's left thread to 'root's left thread.
                 root.left.right = root.right;                   // set 'root's parent's right child as 'root's right child.
             }
-            else                                            // Case 3) deleting a node with 2 non-threaded children.
+            else if (root == this.root)                     // Case 3) deleteing root of the DTBST
+            {
+                TreeNode replacementNode = null;
+                if (root.right != null)
+                {
+                    replacementNode = getSuccessor(root);   // set replacement for 'root' as its successor if it exists
+
+                    if (replacementNode != null)
+                    {
+                        replacementNode.left = root.left;   // set 'replacementNode's left child.
+                        if (root.right != replacementNode)  // set 'replacementNodes' right child as 'root's right child as long as it is not itself.
+                        {
+                            replacementNode.right.left = replacementNode.left;  // Set 'replacementNodes's parent's left child as 'replacementNode's left child/thread
+                            replacementNode.right = root.right;
+                        }
+                        this.root = replacementNode;        // set root of DTBST to 'replacementNode'
+                    }
+                }
+                else if (root.left != null)
+                {
+                    replacementNode = getPredecessor(root); // set replacement for 'root' as its predecessor if it exists
+
+                    if (replacementNode != null)
+                    {
+                        replacementNode.right = root.right; // set 'replacementNode's right child.
+                        if (root.left != replacementNode)   // set 'replacementNode's left child as 'root's left child as long as it is not itself.
+                        {
+                            replacementNode.left.right = replacementNode.right;  // Set 'replacementNodes's parent's right chiuld as 'replacementNode's right child/thread
+                            replacementNode.left = root.left;
+                        }
+                        this.root = replacementNode;        // set root of DTBST to 'replacementNode'
+                    }
+                }
+
+                // If the 'replacementNode' is still null, 'root' is the only node in the DTBST, remove it.
+            }
+            else                                            // Case 4) deleting a node with 2 non-threaded children.
             // Set 'root's Event value to it's right child's Event value, then delete 'root's right child.
             {
                 Event tmp = root.right.event;               // Store the Event value of 'root's right child
@@ -245,7 +281,7 @@ public class DTBST
                 return;     // Return here or else 'root' will be set to null later (don't want that).
             }
 
-            root = null;                                // delete root
+            root = null;                                // delete 'root'
     }
 
     /**

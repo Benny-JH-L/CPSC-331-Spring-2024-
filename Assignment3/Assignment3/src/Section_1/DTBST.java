@@ -58,10 +58,7 @@ public class DTBST
     private boolean recursiveAddEvent(TreeNode root, TreeNode nodeToAdd)
     {
         if (checkConflict(root.event, nodeToAdd.event))    
-        {
-            System.out.println("Conflict");
             return false;
-        }
         // If 'nodeToAdd' event's start time is < its root's event start time, go to left subtree and keep checking
         else if (nodeToAdd.event.startTime < root.event.startTime)
         {
@@ -1022,7 +1019,12 @@ public class DTBST
             Event tmp = findPreviousEvent(eventToAdd.startTime);   
 
             if (tmp != null)                                        // If its previous event exists,
-                eventToAdd = tmp;                                   // Make the previous event to be checked first.
+            {
+                Event tmp2 = inRangeHelper(tmp, start, end);
+
+                if (tmp2 != null)                                   // If the previous event 'tmp' does not have conflict,
+                    eventToAdd = tmp;                               // Make the previous event to be checked first.
+            }
         }
         else if (eventToAdd == null)                                // If it is null, find the previous event at 'start'.
         {

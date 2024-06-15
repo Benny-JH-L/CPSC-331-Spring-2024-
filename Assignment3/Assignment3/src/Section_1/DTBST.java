@@ -384,7 +384,7 @@ public class DTBST
     }
 
     /**
-     * Recursively goes through the DTBST while checking if 'root' contains 'eventName'.
+     * Recursively goes through the DTBST while checking if 'root' contains 'eventName'. Using pre-order tree traversal.
      * @param root a TreeNode, node to be checked.
      * @param eventName a String, name of the event to be deleted.
      * @return a boolean. Return true if an Event with the name 'eventName' was found and deleted, 
@@ -600,7 +600,7 @@ public class DTBST
     }
 
     /**
-     * Recursively goes through the DTBST and checks if 'root' contains the Event with the name 'eventName'. 
+     * Recursively goes through the DTBST and checks if 'root' contains the Event with the name 'eventName'. Using pre-order tree traversal.
      * Then returns an Object[] of size 2, that contains an Event (index 0) and a boolean (index 1) of if the Event was found.
      * @param root a TreeNode, node to check.
      * @param eventName a String, the name of the Event being searched for.
@@ -872,7 +872,7 @@ public class DTBST
 
     /**
      * Recursively goes through the DTBST and checks/searches for the TreeNode that contains the event with the name 'eventName'.
-     * If it finds this node, returns the event immediately before this node.
+     * Using pre-order tree traversal. If it finds this node, returns the event immediately before this node.
      * @param root a TreeNode, the node to be checked.
      * @param eventName a String, the name of the event whose immediate event is being searched for.
      * @return an Event. Returns the Event that immediately occured before 'eventName', otherwise returns null. 

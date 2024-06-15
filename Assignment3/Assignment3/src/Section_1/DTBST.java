@@ -9,7 +9,7 @@ import java.util.List;
 public class DTBST 
 {
 
-    public TreeNode root = null;    // change back to private!
+    private TreeNode root = null;
 
     public DTBST()
     {
@@ -171,7 +171,7 @@ public class DTBST
 
     /**
      * Checks if this event is the one we are looking for to delete. 
-     * That is if 'event's start time <= 'time' <= event's end time, 
+     * That is if 'event's start time <= 'time' <= event's end time,
      * 'event' is the one we are looking for to delete, 
      * return true, otherwise return false.
      * @param eventToCheck an Event, to be checked.
@@ -505,17 +505,19 @@ public class DTBST
             else if (root.leftThread)                                       // 2) and root is left threaded, time' is between 'root' and 'root.left', return 'root.event' as 'root' event start > 'root.left' event start,
                 nextEvent = root.event;                                     // and ('root.left' event start < 'time' < 'root' event start).
         }
-        else if (time >= rootEventStart)
+        else if (time > rootEventStart)
         {
             if (root.right == null)                 // Special case where 'root' is the right-most node in the DTBST     
                 return null;                        // since we are finding the first event that starts after 'time', there is no event that exists, return null.
             else if (!root.rightThread)                                 // If 'time' >= 'root's event start time:
                 return recursiveFindNextEventByTime(root.right, time);      // 1) and 'root' is not right threaded, check right child/sub-tree.
             else if (root.rightThread)                                      // 2) and 'root' is right threaded, 'time' is between 'root' and 'root.right',
-                nextEvent = root.right.event;                               // return 'root.right.event'. As 'root' event start <= 'time' < 'root.right' event start.
+                nextEvent = root.right.event;                               // return 'root.right.event'. As 'root' event start < 'time' < 'root.right' event start.
         }
+        else if (time == rootEventStart)            // If 'time' is equal to 'root's event start, 
+            return root.event;                      // return 'root's event as this will be the next event.
         
-        // Otherwise, 'root's event start == 'time', return 'root's event.
+        // Return this event
         return nextEvent;
     }
 
@@ -989,9 +991,97 @@ public class DTBST
     */
     private void collectEventsInRange(TreeNode node, int start, int end, List<Event> events) 
     {
-    // Implement this method
-    implment this :)
+        // Get all events onward from 'start'
+        if (end < 0)
+        {
+            Event eventToAdd = findNextEvent(start);
+
+            while (eventToAdd != null)
+            {
+                events.add(eventToAdd);
+                int eventEndTime = eventToAdd.startTime + eventToAdd.duration;
+                eventToAdd = findNextEvent(eventEndTime);
+            }
+        }
+        else 
+            collectEventsInRangeHelper(node, start, end, events);
+        
     }
+
+    private void collectEventsInRangeHelper(TreeNode node, int start, int end, List<Event> events)
+    {
+        Event eventToAdd = findNextEvent(start);
+
+        while (eventToAdd != null)
+        {
+            int eventStart = eventToAdd.startTime;
+            int eventEnd = eventStart + eventToAdd.duration;
+            // Case 1: eventToAdd starts before 'start' and ends before time 'start', not in range.
+            if (eventStart <= start && eventEnd <= start)
+                break;
+            // Case 2: eventToAdd starts after 'end' thus will end after time 'end', not in range.
+            else if (eventStart > end)
+                break;
+            // Case 3: Otherwise, eventToAdd is between times 'start' and 'end', or starts before time 'start' and ends before or at time 'end',
+            // or starts after 'start' and before 'end' and ends after 'end', or starts before 'start' and ends after 'end'. All these events are occuring within 'start' and 'end'
+            else
+                events.add(eventToAdd);
+            eventToAdd = findNextEvent(eventEnd);
+        }
+    }
+
+    // OLD
+            // if (eventStart >= start && (eventEndTime <= end || eventStart == end))   // Event start and end times are between 'start' and 'end', add it to the List. Or event is occuring at time 'end', add it to the List.
+            // {
+            //     events.add(eventToAdd);
+            // }
+            // // need to consider edge cases, there is one i found, refer to tests.
+
+            // eventToAdd = findNextEvent(eventEndTime);
+
+    // OLD2
+            // Event eventToAdd = findNextEvent(start);    // old
+            // int durationOfStartToEnd = end - start;
+    
+            // while (eventToAdd != null)
+            // {
+            //     int eventStart = eventToAdd.startTime;
+            //     int eventEndTime = eventToAdd.startTime + eventToAdd.duration;
+    
+            //     // Case 1: event's end time <= 'start', event is not in range, don't add, check next.
+            //     if (eventEndTime <= start)
+            //     {
+            //         eventToAdd = findNextEvent(eventEndTime);     // Find next event from this event's end time
+            //         continue;
+            //     }
+            //     // Case 2: event's end time is between 'start' and 'end', event is in range, add it.
+            //     else if (eventEndTime > start && eventEndTime <= end)
+            //     {
+            //         events.add(eventToAdd);
+            //         eventToAdd = findNextEvent(eventEndTime);     // Find next event from this even't end time
+            //     }
+            //     // Case 3: event's start time starts at time 'end', event is in range, add it.
+            //     else if (eventStart == end)
+            //     {
+            //         events.add(eventToAdd);
+            //         eventToAdd = findNextEvent(eventEndTime);     // Find next event from this even't end time
+            //     }
+            //     // Case 4: event starts before time 'start' and ends between 'start' and 'end', is in range add it.
+            //     else if (eventStart + durationOfStartToEnd > start && eventStart + durationOfStartToEnd <= end)
+            //     {
+            //         events.add(eventToAdd);
+            //         eventToAdd = findNextEvent(eventEndTime);     // Find next event from this even't end time
+            //     }
+            //     // Case 5: event starts before 'start' and ends after 'end', is in range add it then exit.
+            //     else if (eventStart + durationOfStartToEnd <= end && eventEndTime >= end)
+            //     {
+            //         events.add(eventToAdd);
+            //         break;
+            //     }
+            //     // Case 6: event starts after 'end', event is not in range, stop checking.
+            //     else if (eventStart > end)
+            //         break;
+            // }
     
 }
 

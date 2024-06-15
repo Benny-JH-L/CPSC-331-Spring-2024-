@@ -1,5 +1,7 @@
 package Section_1;
 
+import java.util.List;
+
 import Section_1.Event;
 import Section_1.TreeNode;
 
@@ -20,18 +22,19 @@ public class Main
 
         // Should redo these tests...
         // addTest1();
-        // test2();
+        test2_deleteEvent_int_time();
         // test3();
         // test4();
         // test5();
 
         // Good tests
-        test6();
-        test7();
-        test8();
-        test9();
-        test10();
-        test11();
+        // test6_findNextEvent_int_time();
+        // test7();
+        // test8();
+        // test9();
+        // test10();
+        // test11();
+        // test12();
 
         // bst = createDefaultBST();
         // bst.findPreviousEvent(22);
@@ -41,11 +44,11 @@ public class Main
      * My test cases, will be deleted before submition.
      */
 
-    private static DTBST createDefaultBST()
+    private static DTBST createDefaultBST(int defaultTime)
     {
         DTBST bst = new DTBST();
 
-        int duration = 1;
+        int duration = defaultTime;
 
         Event e = new Event("n20", 20, duration);
         boolean b = bst.addEvent(e);
@@ -107,7 +110,7 @@ public class Main
      * Test cases I created are for the tree:
      * https://www.youtube.com/watch?v=vkqdI9gNLww&ab_channel=Let%27sLearn @7:01
      */
-    private static void test2()
+    private static void test2_deleteEvent_int_time()
     {
         System.out.println("\n\n----Add Test 2---");
         DTBST bst = new DTBST();
@@ -144,10 +147,6 @@ public class Main
         e = new Event("n13", 13, duration);
         b = bst.addEvent(e);
         System.out.printf("Added Event<%s> | %s\n", e.toString(), b);
-
-        // Note these wont work once i make 'root' private in DTBST
-        // System.out.println("Predecessor of root is: " + bst.getPredecessor(bst.root).event.toString());
-        // System.out.println("Successor of root is: " + bst.getSuccessor(bst.root).event.toString());
 
         // 30 should be the root of the 'bst' with right child null.
         boolean deleted1 = bst.deleteEvent(20);    // delete root, testing case 3.
@@ -249,7 +248,7 @@ public class Main
         System.out.printf("FindEventAtTime(%d) = %s", 170, e1.toString());
     }
 
-    private static void test5()
+    private static void test5_findEventAtTime()
     {
         System.out.println("\n\n----Add Test 5----");
         DTBST bst = new DTBST();
@@ -313,7 +312,7 @@ public class Main
     /**
      * Tests 'findNextEvent(int time)' method
      */
-    private static void test6()
+    private static void test6_findNextEvent_int_time()
     {
         // As of June 10 11:47pm 'findNextEvent(int time)' passed all tests.
 
@@ -341,7 +340,7 @@ public class Main
         /*
         Note, for case 34, it should return a null event
         0 should return 5
-        20 should return n30     
+        20 should return n30     -- return n20?
         8 should return n10
         9 should return n10
         2 should return n5
@@ -351,7 +350,7 @@ public class Main
         34 should return null
         16 should return n17
         18 should return n20
-        17 should return n20
+        17 should return n20    -- return n17?
         */
     }
 
@@ -404,7 +403,7 @@ public class Main
 
         String[] eventNames = {"n5", "n10", "n13", "n14", "n16", "n17", "n20", "n30", "n421"};
         int[] times =         {6, 10, 13, 14, 16, 18, 20, 31, 421};
-        DTBST bst = createDefaultBST();
+        DTBST bst = createDefaultBST(1);
 
         System.out.printf("\nfindNextEvent(int time)\t\t\t\t|\tfindNextEvent(String eventName)\t\t\t|\tSame Result");
         for (int i = 0; i < eventNames.length; i++)
@@ -444,7 +443,7 @@ public class Main
         Event e9 = new Event("e9", 16, 120);  // conflict     (true)
         Event e10 = new Event("e10", 13, 200);  // conflict     (true)
 
-        DTBST bst = createDefaultBST();
+        DTBST bst = createDefaultBST(1);
 
         Event[] events = {e1, e2, e3, e4, e5, e6, e7, e8, e9, e10};
 
@@ -465,7 +464,7 @@ public class Main
 
         System.out.println("\n\n----Test 10 | findPreviousEvent(int time)----");
 
-        DTBST bst = createDefaultBST();
+        DTBST bst = createDefaultBST(1);
         bst.addEvent(new Event("n40", 40, 10));
         bst.addEvent(new Event("n33", 33, 2));
         bst.addEvent(new Event("n60", 60, 1));
@@ -501,7 +500,7 @@ public class Main
 
         System.out.println("\n\n----Test 11 | findPreviousEvent(String eventName)----");
 
-        DTBST bst = createDefaultBST();
+        DTBST bst = createDefaultBST(1);
         bst.addEvent(new Event("n40", 40, 10));
         bst.addEvent(new Event("n33", 33, 2));
 
@@ -528,4 +527,86 @@ public class Main
         */
     }
     
+    /**
+     * Tests 'getEventsInRange(int startTimeRange, int endTimeRange)'
+     */
+    private static void test12()
+    {
+
+        System.out.println("\n\n----Test 12 | getEventsInRange(int startTimeRange, int endTimeRange)----");
+        DTBST bst = createDefaultBST(1);
+
+        // Test 1
+        List<Event> list = bst.getEventsInRange(0, -1);
+
+        System.out.printf("\nGet Events In Range: [%d, %d]:", 0, -1);
+
+        for (Event event : list)
+            System.out.printf("\nEvent<%s>,", event);
+
+        // Expected result:
+        /* (All events in DTBST)
+        Event<n5 starts at 5 for 4 minutes.>,
+        Event<n10 starts at 10 for 1 minutes.>,
+        Event<n13 starts at 13 for 1 minutes.>,
+        Event<n14 starts at 14 for 1 minutes.>,
+        Event<n16 starts at 16 for 1 minutes.>,
+        Event<n17 starts at 17 for 1 minutes.>,
+        Event<n20 starts at 20 for 1 minutes.>,
+        Event<n30 starts at 30 for 1 minutes.>,
+         */
+        
+        // Test 2
+        list = bst.getEventsInRange(16, -1);
+        System.out.printf("\nGet Events In Range: [%d, %d]:", 16, -1);
+
+        for (Event event : list)
+            System.out.printf("\nEvent<%s>,", event);
+        
+        // Expected result: -? still waiting on response for getNextEvent(int time) question
+        /* (All events starting from 16 onwards)
+        Event<n16 starts at 16 for 1 minutes.>,
+        Event<n17 starts at 17 for 1 minutes.>,
+        Event<n20 starts at 20 for 1 minutes.>,
+        Event<n30 starts at 30 for 1 minutes.>,
+         */
+        
+        // Test 3
+        list = bst.getEventsInRange(8, 20);
+        System.out.printf("\nGet Events In Range: [%d, %d]:", 8, 20);
+
+        for (Event event : list)
+            System.out.printf("\nEvent<%s>,", event);
+        
+        // Expected result: -? still waiting on response for getNextEvent(int time) question
+        /* (All events starting between 8 and 20)
+        Event<n10 starts at 10 for 1 minutes.>,
+        Event<n13 starts at 13 for 1 minutes.>,
+        Event<n14 starts at 14 for 1 minutes.>,
+        Event<n16 starts at 16 for 1 minutes.>,
+        Event<n17 starts at 17 for 1 minutes.>,
+        Event<n20 starts at 20 for 1 minutes.>,
+        */
+
+        // Test 4 (edge case)
+        list = bst.getEventsInRange(0, 8);
+        System.out.printf("\nGet Events In Range: [%d, %d]:", 0, 8);
+
+        for (Event event : list)
+            System.out.printf("\nEvent<%s>,", event);
+
+        // Expected result:
+        // Event<n5 starts at 5 for 4 minutes.>,
+
+        // Test 5
+        list = bst.getEventsInRange(19, 31);
+        System.out.printf("\nGet Events In Range: [%d, %d]:", 19, 30);
+
+        for (Event event : list)
+            System.out.printf("\nEvent<%s>,", event);
+
+        // Expected result:
+        // Event<n20 starts at 20 for 1 minutes.>,
+        // Event<n30 starts at 30 for 1 minutes.>,
+    }
 }

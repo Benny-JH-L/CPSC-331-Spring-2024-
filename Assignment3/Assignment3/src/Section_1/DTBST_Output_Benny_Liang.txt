@@ -1,0 +1,17 @@
+Conflict
+Client Call starts at 630 for 45 minutes.
+Code Review starts at 465 for 15 minutes.
+Team Meeting starts at 600 for 30 minutes.
+No Such Event
+Code Review starts at 465 for 15 minutes.
+Team Meeting starts at 600 for 30 minutes.
+No Such Event
+Project Kickoff starts at 480 for 60 minutes.
+Stand Up starts at 550 for 10 minutes.
+Client Call starts at 630 for 45 minutes.
+Wrap Up Meeting starts at 1010 for 15 minutes.
+Lunch Break starts at 400 for 60 minutes.
+Code Review starts at 465 for 15 minutes.
+Project Kickoff starts at 480 for 60 minutes.
+Stand Up starts at 550 for 10 minutes.
+Client Call starts at 630 for 45 minutes.

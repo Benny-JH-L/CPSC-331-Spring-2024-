@@ -12,32 +12,109 @@ public class Main
 {
     public static void main(String[] args) throws Exception 
     {
+        assignmentTests();
+    }
+
+    /**
+     * Tests outlined in the assignment.
+     */
+    private static void assignmentTests()
+    {
         DTBST bst = new DTBST();
 
-        // Testing checkConflict() of events. (wont work when method is 'private')
-        // Event e0 = new Event("name0", 5000, 30);
-        // Event e1 = new Event("name1", 120, 25);
-        // boolean c0 = bst.checkConflict(e0, e1);  // expect to return true (conflict)
-        // System.out.printf("\nDoes Event<%s> added conflict when compared to Event<%s> | %s\n\n\n", e1.toString(), e0.toString(), c0);
+        // Adding Events from 1. - 7. Requires no printing
+        bst.addEvent(new Event("Project Kickoff", 480, 60));
+        bst.addEvent(new Event("Team Meeting", 600, 30));
+        bst.addEvent(new Event("Client Call", 630, 45));
+        bst.addEvent(new Event("Lunch Break", 400, 60));
+        bst.addEvent(new Event("Code Review", 465, 15));
+        bst.addEvent(new Event("Stand Up", 550, 10));
+        bst.addEvent(new Event("Design Discussion", 960, 60));
 
-        // Should redo these tests...
-        // addTest1();
-        test2_deleteEvent_int_time();
-        // test3();
-        // test4();
-        // test5();
+        // Rest of tasks that require printing
 
-        // Good tests
-        // test6_findNextEvent_int_time();
-        // test7();
-        // test8();
-        // test9();
-        // test10();
-        // test11();
-        test12();
+        // 8.   // Conflict
+        boolean noConflict = bst.addEvent(new Event("Emergency Meeing", 610, 15));
+        if (!noConflict)
+            System.out.println("Conflict");
 
-        // bst = createDefaultBST();
-        // bst.findPreviousEvent(22);
+        // 9.   // "Client Call"
+        Event eventAtTime645 = bst.findEventAtTime(645);
+        printHelper(eventAtTime645);
+        
+        // 10.  // "Code Review"
+        Event event = bst.findNextEvent("Lunch Break");
+        printHelper(event);
+        
+        // 11.  // "Team Meeting"
+        event = bst.findPreviousEvent("Client Call");
+        printHelper(event);
+
+        // 12.  // No Such Event
+        event = bst.findPreviousEvent(410);
+        printHelper(event);
+
+        // 13.  // "Code Review"
+        event = bst.findPreviousEvent(490);
+        printHelper(event);
+
+        // 14.  // "Team Meeting"
+        event = bst.findNextEvent(570);
+        printHelper(event);
+
+        // ----- Deleting portion -----
+        // 15.  // Deleted event
+        boolean deleted = bst.deleteEvent("Design Discussion");
+        printHelperDelete(deleted);
+
+        // 16.  // No Such Event
+        deleted = bst.deleteEvent(565);
+        printHelperDelete(deleted);
+
+        // 17.  // Deleted event
+        deleted = bst.deleteEvent(625);
+        printHelperDelete(deleted);
+
+        // ----- End of Deleting portion -----
+
+        // 18.  // Added event
+        noConflict = bst.addEvent(new Event("Wrap Up Meeting", 1010, 15));
+        if (!noConflict)
+            System.out.println("Conflict");
+        
+        // 19. 
+        /* Prints Events with these names (in this order): 
+         * "Project Kickoff", "Stand Up", "Client Call", "Wrap Up Meeting",
+        */
+        List<Event> list = bst.getEventsInRange(480, 1020);
+
+        for (Event e : list)
+            System.out.println(e);
+        
+        // 20.
+        /*
+         * Prints Events with these names (in this order):
+         * "Lunch Break", "Code Review", "Project Kickoff", "Stand Up", "Client Call"
+         */
+        list = bst.getEventsInRange(0, 720);
+
+        for (Event e : list)
+            System.out.println(e);
+
+    }
+
+    private static void printHelper(Event event)
+    {
+        if (event == null)
+            System.out.println("No Such Event");
+        else
+            System.out.println(event);
+    }
+
+    private static void printHelperDelete(boolean b)
+    {
+        if (!b)
+            System.out.println("No Such Event");
     }
 
     /**
@@ -317,7 +394,7 @@ public class Main
         // As of June 10 11:47pm 'findNextEvent(int time)' passed all tests.
 
         System.out.println("\n\n----Test 6 | findNextEvent(int time)----");
-        DTBST bst = createDefaultBST();
+        DTBST bst = createDefaultBST(1);
 
         int[] testCases = {0, 20, 8, 9, 2, 7, 21, 31, 34, 16, 18, 17};
 
@@ -361,7 +438,7 @@ public class Main
     {
         // As of June 10 11:05pm 'findNextEvent(String eventName)' passed all tests.
         System.out.println("\n\n----Test 7 | findNextEvent(String eventName)----");
-        DTBST bst = createDefaultBST();
+        DTBST bst = createDefaultBST(1);
 
         String[] testCases = {"n5", "n10", "n13", "n14", "n16", "n17", "n20", "n30", "n421"};
 
@@ -530,7 +607,7 @@ public class Main
     /**
      * Tests 'getEventsInRange(int startTimeRange, int endTimeRange)'
      */
-    private static void test12()
+    private static void test12_getEventsInRange()
     {
         // As of June 14 6:56pm 'getEventsInRange(int startTimeRange, int endTimeRange)' passed all tests.
 

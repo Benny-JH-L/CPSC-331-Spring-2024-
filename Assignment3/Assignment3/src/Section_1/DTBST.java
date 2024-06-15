@@ -1004,14 +1004,38 @@ public class DTBST
             }
         }
         else 
-            collectEventsInRangeHelper(node, start, end, events);
-        
+            collectEventsInRangeHelper(start, end, events);
     }
 
-    private void collectEventsInRangeHelper(TreeNode node, int start, int end, List<Event> events)
+    /**
+     * Collects the events in range that are occuring between 'start' and 'end'.
+     * @param start an int, the 'start' time.
+     * @param end an int, the 'end' time.
+     * @param events a List<Events> that collects the events in range.
+     */
+    private void collectEventsInRangeHelper(int start, int end, List<Event> events)
     {
-        Event eventToAdd = findNextEvent(start);
+        Event eventToAdd = findNextEvent(start);                    // First get the next event at time 'start'
 
+        if (eventToAdd != null)                                     // If not null, get the previous event, as it could have started before time 'start' but not yet ended, where this events end time <= 'end'.
+        {
+            Event tmp = findPreviousEvent(eventToAdd.startTime);   
+
+            if (tmp != null)                                        // If its previous event exists,
+                eventToAdd = tmp;                                   // Make the previous event to be checked first.
+        }
+        else if (eventToAdd == null)                                // If it is null, find the previous event at 'start'.
+        {
+            Event tmp = null;
+            eventToAdd = findPreviousEvent(start);
+            if (eventToAdd != null)                                 // If the previous event is not null, check it,
+                tmp = inRangeHelper(eventToAdd, start, end);
+            
+            if (tmp == null)                                        // If the previous event is not in range (returned null) then find the next event after this one.
+                eventToAdd = findNextEvent(eventToAdd.startTime + eventToAdd.duration);
+        }                        
+
+        // Go through events
         while (eventToAdd != null)
         {
             int eventStart = eventToAdd.startTime;
@@ -1028,6 +1052,27 @@ public class DTBST
                 events.add(eventToAdd);
             eventToAdd = findNextEvent(eventEnd);
         }
+    }
+
+    /**
+     * A helper method for collectEventsInRangeHelper(...). 
+     * @param eventToAdd an Event, who is being checked.
+     * @param start an int, 'start' time.
+     * @param end an int, 'end' time.
+     * @return an Event. Returns 'eventToAdd' if is in range, otherwise returns null.
+     */
+    private Event inRangeHelper(Event eventToAdd, int start, int end)
+    {
+        int eventStart = eventToAdd.startTime;
+        int eventEnd = eventStart + eventToAdd.duration;
+        // Case 1: eventToAdd starts before 'start' and ends before time 'start', not in range.
+        if (eventStart <= start && eventEnd <= start)
+            return null;
+        // Case 2: eventToAdd starts after 'end' thus will end after time 'end', not in range.
+        else if (eventStart > end)
+            return null;
+        // Otherwise it is in range.
+        return eventToAdd;
     }
 
     // OLD
